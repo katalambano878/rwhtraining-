@@ -3,7 +3,7 @@
 import { MoolreAdapter, type PaymentTier, type MomoNetwork, type TransactionPayload } from "@/lib/moolre-adapter";
 import { tierInitialAmountGhs } from "@/lib/pricing";
 import { PaystackAdapter } from "@/lib/paystack-adapter";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/db";
 import { applicationSchema } from "@/lib/validations";
 
 export async function submitApplicationAction(formData: FormData) {

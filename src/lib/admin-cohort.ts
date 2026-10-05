@@ -27,10 +27,8 @@ export function resolveCohortScopeId(
   return filter || null;
 }
 
-export function filterByCohortId<T extends { cohort_id?: string | null }>(
-  rows: T[],
-  cohortId: string | null
-): T[] {
-  if (!cohortId) return rows;
-  return rows.filter((row) => row.cohort_id === cohortId);
+export function filterByCohortId(rows: any, cohortId: string | null): any[] {
+  const list: any[] = Array.isArray(rows) ? rows : [];
+  if (!cohortId) return list;
+  return list.filter((row) => row?.cohort_id === cohortId);
 }

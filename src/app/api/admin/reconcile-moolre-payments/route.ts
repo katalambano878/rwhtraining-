@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
-import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { createClient as createServiceClient } from "@/lib/db";
 import { MoolreAdapter } from "@/lib/moolre-adapter";
 import { onboardPaidStudent } from "@/lib/onboard-paid-student";
 
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
         // Only reconcile Moolre payments (gateway null/moolre; skip paystack)
         const pendingPayments = (allPending || []).filter(
-            (p) => !p.gateway || p.gateway === "moolre"
+            (p: { gateway?: string | null }) => !p.gateway || p.gateway === "moolre"
         );
 
         if (!pendingPayments.length) {

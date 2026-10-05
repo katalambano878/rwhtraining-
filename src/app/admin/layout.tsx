@@ -6,17 +6,15 @@ import Image from "next/image";
 import { LayoutDashboard, Users, CreditCard, Settings as SettingsIcon, LogOut, ChevronRight, Menu, Bell, Loader2, ShieldCheck, ArrowUpRight, AlertCircle, GraduationCap, X, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { type User } from "@supabase/supabase-js";
-import { createClient } from "@/utils/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const supabase = createClient();
+type AdminUser = { id: string; email: string; role: string };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<AdminUser | null>(null);
     const [loading, setLoading] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -38,60 +36,53 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     useEffect(() => {
         checkUser();
-        const { data: authListener } = supabase.auth.onAuthStateChange(
-            async (_event, session) => {
-                if (session?.user) {
-                    verifyAdmin(session.user);
-                } else {
-                    setUser(null);
-                }
-            }
-        );
-        return () => { authListener.subscription.unsubscribe(); };
     }, []);
 
     useEffect(() => {
         setMobileMenuOpen(false);
     }, [pathname]);
 
-    async function verifyAdmin(loggedInUser: User) {
-        const { data } = await supabase.from('profiles').select('role').eq('id', loggedInUser.id).single();
-        if (data && (data.role === 'ADMIN' || data.role === 'SUPER_ADMIN')) {
+    function acceptAdmin(loggedInUser: AdminUser) {
+        if (loggedInUser.role === "ADMIN" || loggedInUser.role === "SUPER_ADMIN") {
             setUser(loggedInUser);
-        } else {
-            setAuthError("Unauthorized. Administrator privileges required.");
-            await supabase.auth.signOut();
-            setUser(null);
+            setAuthError("");
+            return;
         }
-        setLoading(false);
+        setAuthError("Unauthorized. Administrator privileges required.");
+        setUser(null);
+        void fetch("/api/auth/logout", { method: "POST" });
     }
 
     async function checkUser() {
         setLoading(true);
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
-            await verifyAdmin(session.user);
-        } else {
-            setLoading(false);
-        }
+        const res = await fetch("/api/auth/session");
+        const data = await res.json().catch(() => ({ user: null }));
+        if (data.user) acceptAdmin(data.user);
+        setLoading(false);
     }
 
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
         setLoading(true);
         setAuthError("");
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) {
-            setAuthError(error.message);
+        const res = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.user) {
+            setAuthError(data.error || "Invalid login credentials");
             setLoading(false);
-        } else if (data.user) {
-            await verifyAdmin(data.user);
+            return;
         }
+        acceptAdmin(data.user);
+        setLoading(false);
     }
 
     async function handleLogout() {
         setLoading(true);
-        await supabase.auth.signOut();
+        await fetch("/api/auth/logout", { method: "POST" });
         setUser(null);
         setLoading(false);
     }

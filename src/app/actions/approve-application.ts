@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/db";
 import { createClient as createServerSupabase } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { onboardPaidStudent } from "@/lib/onboard-paid-student";

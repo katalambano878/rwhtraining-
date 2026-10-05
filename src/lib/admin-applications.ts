@@ -15,7 +15,7 @@ type EnrollmentEmailLike = {
     | null;
 };
 
-export type ApplicationGroups<T extends ApplicationLike> = {
+export type ApplicationGroups<T = any> = {
   completedApplications: T[];
   abandonedDrafts: T[];
   unfinishedApplications: T[];
@@ -33,10 +33,10 @@ function getEnrolledEmailSet(enrollments: EnrollmentEmailLike[]): Set<string> {
   );
 }
 
-export function splitApplicationsForAdmin<T extends ApplicationLike>(
-  allApplications: T[],
+export function splitApplicationsForAdmin(
+  allApplications: any[],
   enrollments: EnrollmentEmailLike[]
-): ApplicationGroups<T> {
+): ApplicationGroups<any> {
   const enrolledEmails = getEnrolledEmailSet(enrollments);
 
   const completedApplications = allApplications.filter((app) => !app.is_unfinished);

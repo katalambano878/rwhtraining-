@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/db";
 import { ExportRosterButton } from "../ClientButtons";
 import { Card, CardContent } from "@/components/ui/card";
 import { GraduationCap, Banknote, CreditCard, Users } from "lucide-react";

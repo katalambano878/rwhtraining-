@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { CreditCard, Banknote, Clock, AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
 import { PaymentsClient } from "./PaymentsClient";

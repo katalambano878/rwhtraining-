@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/db";
 
 function parseDevice(ua: string): string {
   if (/Mobile|Android|iPhone|iPod/i.test(ua)) return "mobile";

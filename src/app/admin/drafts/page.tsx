@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/db";
 import { ApplicationsListWithDetail } from "../components/ApplicationsListWithDetail";
 import { ExportReportButton, ExportUnfinishedButton } from "../ClientButtons";
 import { splitApplicationsForAdmin } from "@/lib/admin-applications";

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Users, AlertCircle, Banknote, ArrowUpRight, TrendingUp, TrendingDown, UserPlus, GraduationCap, CreditCard, Activity, Clock, ArrowRight, Zap, Target, Eye } from "lucide-react";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/db";
 import { ExportReportButton, OpenRegistrationsButton } from "./ClientButtons";
 import { SendMessageToStudents } from "./components/SendMessageToStudents";
 import { RevenueChart, TierPieChart, GatewayPieChart, FunnelChart } from "./components/DashboardCharts";

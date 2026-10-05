@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/db";
 import { createClient as createServerSupabase } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { onboardPaidStudent } from "@/lib/onboard-paid-student";
@@ -187,7 +187,7 @@ async function findAuthUserByEmail(supabase: ReturnType<typeof createClient>, em
     let page = 1;
     for (let i = 0; i < 20; i++) {
         const { data } = await supabase.auth.admin.listUsers({ page, perPage: 200 });
-        const u = data?.users?.find((x) => x.email?.toLowerCase() === target);
+        const u = data?.users?.find((x: { email?: string | null }) => x.email?.toLowerCase() === target);
         if (u) return u;
         if (!data?.users?.length) break;
         page++;

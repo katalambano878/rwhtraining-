@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/db";
 
 export async function autosaveApplicationAction(formData: FormData, applicationId?: string) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;

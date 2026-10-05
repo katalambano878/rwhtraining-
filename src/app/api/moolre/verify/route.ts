@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MoolreAdapter } from "@/lib/moolre-adapter";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/db";
 import { onboardPaidStudent } from "@/lib/onboard-paid-student";
 
 /**

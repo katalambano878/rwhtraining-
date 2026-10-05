@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
-import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { createClient as createServiceClient } from "@/lib/db";
 import { sendEmail } from "@/lib/send-email";
 import { SmsAdapter } from "@/lib/sms-adapter";
 import { wrapInLayout } from "@/lib/email-templates";
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Failed to fetch students" }, { status: 500 });
         }
 
-        const recipients = (paidApps || []).filter((a) => a.email);
+        const recipients = (paidApps || []).filter((a: { email?: string | null }) => a.email);
         if (recipients.length === 0) {
             return NextResponse.json({
                 ok: true,

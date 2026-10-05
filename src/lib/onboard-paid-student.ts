@@ -1,4 +1,4 @@
-import { SupabaseClient } from "@supabase/supabase-js";
+type SupabaseClient = ReturnType<typeof import("@/lib/db").createClient>;
 import { COURSE_TOTAL_GHS } from "@/lib/pricing";
 import { sendEmail } from "@/lib/send-email";
 import { SmsAdapter } from "@/lib/sms-adapter";
@@ -113,7 +113,7 @@ export async function onboardPaidStudent(
         if (authError) {
             if (authError.message.includes("already been registered")) {
                 const { data: existingUsers } = await supabase.auth.admin.listUsers();
-                const existing = existingUsers?.users?.find((u) => u.email === appData.email);
+                const existing = existingUsers?.users?.find((u: { email?: string | null; id: string }) => u.email === appData.email);
                 if (existing) {
                     await ensureProfileAndEnrollment(supabase, appData, existing.id);
                     const emailSent = await sendWelcomeExistingEmail(appData.email, appData.first_name);
@@ -127,8 +127,9 @@ export async function onboardPaidStudent(
 
         if (!authData?.user) return { ok: false, error: "No user returned" };
 
-        await supabase.from("profiles").insert({
+        await supabase.from("profiles").upsert({
             id: authData.user.id,
+            email: appData.email,
             role: "STUDENT",
             full_name: `${appData.first_name} ${appData.last_name}`,
             phone: appData.phone || "",
@@ -171,8 +172,9 @@ async function ensureProfileAndEnrollment(
 ) {
     const { data: prof } = await supabase.from("profiles").select("id").eq("id", userId).single();
     if (!prof) {
-        await supabase.from("profiles").insert({
+        await supabase.from("profiles").upsert({
             id: userId,
+            email: appData.email,
             role: "STUDENT",
             full_name: `${appData.first_name} ${appData.last_name}`,
             phone: appData.phone || "",

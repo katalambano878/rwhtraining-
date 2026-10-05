@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createClient as createSupabaseBrowser, type User, type SupabaseClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import { LogOut, BookOpen, Clock, Loader2, ShieldCheck, ArrowRight, Play, FileText, Settings, Trophy, CreditCard, Mail, Phone, MapPin, Lock, ChevronRight, User as UserIcon, Banknote, Calendar, ExternalLink } from "lucide-react";
 import CurriculumTab from "./CurriculumTab";
@@ -14,9 +13,10 @@ import Link from "next/link";
 
 type Tab = "dashboard" | "curriculum" | "profile" | "payments";
 
+type PortalUser = { id: string; email: string; role: string };
+
 export default function StudentPortal() {
-    const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<PortalUser | null>(null);
     const [loading, setLoading] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -33,38 +33,23 @@ export default function StudentPortal() {
     const [changingPassword, setChangingPassword] = useState(false);
 
     useEffect(() => {
-        setSupabase(createSupabaseBrowser(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        ));
+        fetch("/api/auth/session")
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.user) {
+                    setUser(data.user);
+                    return fetchDashboardData();
+                }
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
     }, []);
 
-    useEffect(() => {
-        if (!supabase) return;
-        // Restore session from localStorage on mount — no onAuthStateChange to avoid spurious events
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session?.user) {
-                setUser(session.user);
-                fetchDashboardData(session.user.id, supabase);
-            } else {
-                setLoading(false);
-            }
-        });
-    }, [supabase]);
-
-    async function fetchDashboardData(userId: string, client: SupabaseClient) {
+    async function fetchDashboardData() {
         setLoading(true);
         try {
-            const [profileRes, enrollRes, appRes] = await Promise.all([
-                client.from("profiles").select("*").eq("id", userId).single(),
-                client.from("enrollments").select("*").eq("user_id", userId).single(),
-                client.from("applications").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(1).single()
-            ]);
-            setDashboardData({
-                profile: profileRes.data,
-                enrollment: enrollRes.data,
-                application: appRes.data
-            });
+            const res = await fetch("/api/student/dashboard");
+            if (res.ok) setDashboardData(await res.json());
         } catch (error) {
             console.error("Dashboard error:", error);
         }
@@ -73,31 +58,32 @@ export default function StudentPortal() {
 
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
-        if (!supabase) return;
         setLoading(true);
         setAuthError("");
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) {
-            setAuthError(error.message);
+        const res = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.user) {
+            setAuthError(data.error || "Invalid login credentials");
             setLoading(false);
-        } else if (data?.user) {
-            // Set user directly from sign-in response — no reliance on onAuthStateChange
-            setUser(data.user);
-            await fetchDashboardData(data.user.id, supabase);
+            return;
         }
+        setUser(data.user);
+        await fetchDashboardData();
     }
 
     async function handlePayBalance(gateway: "moolre" | "paystack") {
-        if (!supabase || !user) return;
+        if (!user) return;
         setPayingGateway(gateway);
         setPayingBalance(true);
         setPayError(null);
         try {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session?.access_token) { setPayingBalance(false); setPayingGateway(null); return; }
             const res = await fetch("/api/student/pay-balance", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ gateway }),
             });
             const data = await res.json();
@@ -123,7 +109,6 @@ export default function StudentPortal() {
 
     async function handleChangePassword(e: React.FormEvent) {
         e.preventDefault();
-        if (!supabase) return;
         if (newPassword.length < 8) {
             setPasswordMsg({ type: "error", text: "Password must be at least 8 characters." });
             return;
@@ -134,9 +119,14 @@ export default function StudentPortal() {
         }
         setChangingPassword(true);
         setPasswordMsg(null);
-        const { error } = await supabase.auth.updateUser({ password: newPassword });
-        if (error) {
-            setPasswordMsg({ type: "error", text: error.message });
+        const res = await fetch("/api/auth/password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ password: newPassword }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+            setPasswordMsg({ type: "error", text: data.error || "Could not update password." });
         } else {
             setPasswordMsg({ type: "success", text: "Password updated successfully!" });
             setNewPassword("");
@@ -146,14 +136,13 @@ export default function StudentPortal() {
     }
 
     async function handleLogout() {
-        if (!supabase) return;
-        await supabase.auth.signOut();
+        await fetch("/api/auth/logout", { method: "POST" });
         setUser(null);
         setDashboardData(null);
         setLoading(false);
     }
 
-    if (!supabase || (loading && !user && !authError)) {
+    if (loading && !user && !authError) {
         return (
             <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">

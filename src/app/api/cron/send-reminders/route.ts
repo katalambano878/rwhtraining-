@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/db";
 import { SmsAdapter } from "@/lib/sms-adapter";
 import { sendEmail } from "@/lib/send-email";
 import { wrapInLayout, mergeVariables } from "@/lib/email-templates";
@@ -156,7 +156,7 @@ export async function GET(request: NextRequest) {
 
     // Dedupe by phone/email
     const seen = new Set<string>();
-    const recipients = (unpaidApps || []).filter(a => {
+    const recipients = (unpaidApps || []).filter((a: { phone?: string | null; email?: string | null }) => {
       const key = a.phone || a.email;
       if (!key || seen.has(key)) return false;
       seen.add(key);
