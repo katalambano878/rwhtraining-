@@ -10,6 +10,7 @@ import {
     type CohortFilterValue,
 } from "@/lib/admin-cohort";
 import { CohortScopePicker } from "@/components/admin/CohortScopePicker";
+import { PipelineNote } from "../components/PipelineNote";
 
 export const revalidate = 0;
 
@@ -65,11 +66,13 @@ export default async function AbandonedDraftsPage({
                         Abandoned Drafts
                     </h1>
                     <p className="text-slate-500 text-[15px] font-medium">
-                        Contactable drafts only, excluding anyone already enrolled.
+                        People who started the form and stopped. They are not on Applications or Students.
                     </p>
                 </div>
                 <CohortScopePicker cohorts={data.cohorts} activeCohortId={data.activeCohortId} />
             </div>
+
+            <PipelineNote current="drafts" counts={{ drafts: data.unfinishedApps.length }} />
 
             <div>
                 <ApplicationsListWithDetail

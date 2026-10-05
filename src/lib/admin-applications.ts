@@ -33,23 +33,32 @@ function getEnrolledEmailSet(enrollments: EnrollmentEmailLike[]): Set<string> {
   );
 }
 
+function isEnrolled(app: { id?: string | null; email?: string | null }, enrolledIds: Set<string>, enrolledEmails: Set<string>) {
+  if (app.id && enrolledIds.has(app.id)) return true;
+  const email = app.email?.toLowerCase();
+  return Boolean(email && enrolledEmails.has(email));
+}
+
 export function splitApplicationsForAdmin(
   allApplications: any[],
-  enrollments: EnrollmentEmailLike[]
+  enrollments: Array<EnrollmentEmailLike & { application_id?: string | null }>
 ): ApplicationGroups<any> {
   const enrolledEmails = getEnrolledEmailSet(enrollments);
+  const enrolledIds = new Set(
+    enrollments.map((enrollment) => enrollment.application_id).filter((id): id is string => Boolean(id))
+  );
 
-  const completedApplications = allApplications.filter((app) => !app.is_unfinished);
-  const unfinishedApplications = allApplications.filter((app) => app.is_unfinished);
-  const abandonedDrafts = unfinishedApplications.filter((app) => {
+  const abandonedDrafts = allApplications.filter((app) => {
     const hasContact = Boolean(app.email || app.phone);
-    const enrolled = Boolean(app.email && enrolledEmails.has(app.email.toLowerCase()));
-    return hasContact && !enrolled;
+    return app.is_unfinished && hasContact && !isEnrolled(app, enrolledIds, enrolledEmails);
   });
+  const completedApplications = allApplications.filter(
+    (app) => !app.is_unfinished && !isEnrolled(app, enrolledIds, enrolledEmails)
+  );
 
   return {
     completedApplications,
     abandonedDrafts,
-    unfinishedApplications,
+    unfinishedApplications: abandonedDrafts,
   };
 }

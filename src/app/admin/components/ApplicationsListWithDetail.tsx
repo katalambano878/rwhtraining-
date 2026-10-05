@@ -103,23 +103,29 @@ export function ApplicationsListWithDetail({
           {!hidePipeline && (
             <div className="flex items-center gap-2 flex-wrap">
               <Filter className="w-4 h-4 text-slate-400" />
-              {["ALL", "PENDING_REVIEW", "APPROVED", "WAITLISTED", "REJECTED"].map(s => (
+              {[
+                { key: "ALL", label: "All" },
+                { key: "PENDING_REVIEW", label: "Waiting" },
+                { key: "APPROVED", label: "Approved" },
+                { key: "WAITLISTED", label: "Waitlisted" },
+                { key: "REJECTED", label: "Rejected" },
+              ].map(s => (
                 <button
-                  key={s}
-                  onClick={() => { setStatusFilter(s); setPage(1); }}
+                  key={s.key}
+                  onClick={() => { setStatusFilter(s.key); setPage(1); }}
                   className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors ${
-                    statusFilter === s ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                    statusFilter === s.key ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"
                   }`}
                 >
-                  {s === "ALL" ? "All" : s.replace("_", " ")}
+                  {s.label}
                 </button>
               ))}
               <span className="w-px h-6 bg-slate-200 mx-1" />
               {[
-                { key: "ALL", label: "All Payments" },
-                { key: "FULLY_PAID", label: "Fully Paid" },
-                { key: "PART_PAYMENT", label: "Part Payment" },
-                { key: "PENDING", label: "Pending" },
+                { key: "ALL", label: "Any payment" },
+                { key: "FULLY_PAID", label: "Paid in full" },
+                { key: "PART_PAYMENT", label: "Part paid" },
+                { key: "PENDING", label: "Unpaid" },
               ].map(p => (
                 <button
                   key={p.key}
@@ -141,8 +147,8 @@ export function ApplicationsListWithDetail({
             <div className="p-6 border-b border-slate-100 bg-slate-50/50">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-[19px] font-extrabold text-slate-900 tracking-tight">Application Pipeline</h3>
-                  <p className="text-slate-500 text-[13px] font-medium mt-1">{filteredApps.length} applications • Click to view full details</p>
+                  <h3 className="text-[19px] font-extrabold text-slate-900 tracking-tight">Submitted applications</h3>
+                  <p className="text-slate-500 text-[13px] font-medium mt-1">{filteredApps.length} people · not enrolled yet · click a row for details</p>
                 </div>
                 {ExportReportButton}
               </div>
@@ -182,7 +188,7 @@ export function ApplicationsListWithDetail({
                       <td className="px-4 py-4 text-[13px] font-bold text-slate-600">{app.tier ? `${app.tier}%` : "—"}</td>
                       <td className="px-4 py-4 text-center">
                         <span className={`text-[10px] font-extrabold px-2.5 py-1 rounded-md border uppercase tracking-widest ${statusColor(app.status)}`}>
-                          {app.status?.replace("_", " ") || "—"}
+                          {app.status === "PENDING_REVIEW" ? "Waiting" : app.status === "APPROVED" ? "Approved" : app.status === "REJECTED" ? "Rejected" : app.status === "WAITLISTED" ? "Waitlisted" : "—"}
                         </span>
                       </td>
                       <td className="px-4 py-4 text-center">
@@ -194,7 +200,7 @@ export function ApplicationsListWithDetail({
                           if (!isPaid) {
                             return (
                               <span className={`text-[11px] font-extrabold uppercase tracking-wider ${paymentColor(app.payment_status)}`}>
-                                {app.payment_status || "—"}
+                                {app.payment_status === "PENDING" ? "Unpaid" : app.payment_status || "Unpaid"}
                               </span>
                             );
                           }
@@ -204,14 +210,14 @@ export function ApplicationsListWithDetail({
                           if (hasBalance) {
                             return (
                               <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-600" title={balanceDue != null ? `GHS ${balanceDue} still due` : `Tier: ${app.tier}%`}>
-                                Part Payment
+                                Part paid
                               </span>
                             );
                           }
 
                           return (
                             <span className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-600">
-                              Fully Paid
+                              Paid in full
                             </span>
                           );
                         })()}
@@ -226,7 +232,7 @@ export function ApplicationsListWithDetail({
                       <td colSpan={6} className="text-center py-12 text-[13px] text-slate-400 font-medium">
                         {search || statusFilter !== "ALL" || paymentFilter !== "ALL"
                           ? "No applications match your filters"
-                          : "No completed applications yet"}
+                          : "No applications yet. People who only started the form are under Abandoned Drafts."}
                       </td>
                     </tr>
                   )}
@@ -264,7 +270,7 @@ export function ApplicationsListWithDetail({
                     Abandoned Drafts
                   </h3>
                   <p className="text-slate-500 text-[13px] font-medium mt-1">
-                    {filteredDrafts.length} contactable drafts (not enrolled)
+                    {filteredDrafts.length} people who started and did not submit
                   </p>
                 </div>
                 {ExportUnfinishedButton}

@@ -23,8 +23,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     const navigation = [
         { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-        { name: "Applications", href: "/admin/applications", icon: Users },
         { name: "Abandoned Drafts", href: "/admin/drafts", icon: AlertCircle },
+        { name: "Applications", href: "/admin/applications", icon: Users },
         { name: "Students", href: "/admin/students", icon: GraduationCap },
         { name: "Payments", href: "/admin/payments", icon: CreditCard },
         { name: "Marketing", href: "/admin/marketing", icon: Megaphone },
@@ -181,7 +181,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     </div>
                     <div className="flex flex-col overflow-hidden">
                         <span className="text-[12px] font-bold text-slate-900 truncate">{user.email}</span>
-                        <span className="text-[10px] text-blue-600 uppercase tracking-widest font-bold mt-0.5">Admin</span>
+                        <span className="text-[10px] text-blue-600 uppercase tracking-widest font-bold mt-0.5">{user.role === "SUPER_ADMIN" ? "Super Admin" : "Admin"}</span>
                     </div>
                 </div>
                 <Button variant="ghost" className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl font-bold text-[13px] h-10 transition-colors" onClick={handleLogout}>

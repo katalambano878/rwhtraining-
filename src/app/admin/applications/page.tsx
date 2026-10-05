@@ -11,6 +11,7 @@ import {
     type CohortFilterValue,
 } from "@/lib/admin-cohort";
 import { CohortScopePicker } from "@/components/admin/CohortScopePicker";
+import { PipelineNote } from "../components/PipelineNote";
 
 export const revalidate = 0;
 
@@ -39,27 +40,18 @@ async function getApplicationsData(cohortFilter: CohortFilterValue) {
     const grouped = splitApplicationsForAdmin(all, enrollments);
 
     const balanceDueByApplicationId: Record<string, number> = {};
-    enrollments.forEach((e: any) => {
-        const appId = e.application_id;
-        if (!appId) return;
-
-        const paymentRef = e.applications?.payment_reference;
+    for (const app of grouped.completedApplications) {
         const seen = new Set<string>();
         let paid = 0;
-
-        for (const p of paidPayments) {
-            if (seen.has(p.id)) continue;
-            if (p.application_id === appId) {
-                seen.add(p.id);
-                paid += Number(p.amount_ghs || 0);
-            } else if (paymentRef && p.reference === paymentRef) {
-                seen.add(p.id);
-                paid += Number(p.amount_ghs || 0);
-            }
+        for (const payment of paidPayments) {
+            if (seen.has(payment.id)) continue;
+            const matches = payment.application_id === app.id || (app.payment_reference && payment.reference === app.payment_reference);
+            if (!matches) continue;
+            seen.add(payment.id);
+            paid += Number(payment.amount_ghs || 0);
         }
-
-        balanceDueByApplicationId[appId] = Math.max(0, COURSE_TOTAL_GHS - paid);
-    });
+        if (app.id) balanceDueByApplicationId[app.id] = Math.max(0, COURSE_TOTAL_GHS - paid);
+    }
 
     return {
         applications: grouped.completedApplications,
@@ -89,14 +81,16 @@ export default async function ApplicationsPipelinePage({
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200/60 pb-8">
                 <div className="space-y-3">
                     <h1 className="text-3xl md:text-[42px] font-extrabold tracking-tight text-slate-900 leading-none">
-                        Applications Pipeline
+                        Applications
                     </h1>
                     <p className="text-slate-500 text-[15px] font-medium">
-                        Completed applications. Click any row to view full details.
+                        Submitted forms that are not students yet. Enrolled people are only on the Students page.
                     </p>
                 </div>
                 <CohortScopePicker cohorts={data.cohorts} activeCohortId={data.activeCohortId} />
             </div>
+
+            <PipelineNote current="applications" counts={{ applications: data.applications.length }} />
 
             <div>
                 <ApplicationsListWithDetail

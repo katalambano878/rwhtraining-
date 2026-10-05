@@ -12,6 +12,7 @@ import {
     type CohortFilterValue,
 } from "@/lib/admin-cohort";
 import { CohortScopePicker } from "@/components/admin/CohortScopePicker";
+import { PipelineNote } from "../components/PipelineNote";
 
 export const revalidate = 0;
 
@@ -84,8 +85,8 @@ export default async function ActiveStudentsPage({
         <div className="space-y-8 animate-in slide-in-from-bottom-6 duration-1000">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200/60 pb-8">
                 <div className="space-y-3">
-                    <h1 className="text-3xl md:text-[42px] font-extrabold tracking-tight text-slate-900 leading-none">Active Students</h1>
-                    <p className="text-slate-500 text-[15px] font-medium">Enrolled members with payment confirmation and credentials.</p>
+                    <h1 className="text-3xl md:text-[42px] font-extrabold tracking-tight text-slate-900 leading-none">Students</h1>
+                    <p className="text-slate-500 text-[15px] font-medium">Enrolled people only. They no longer appear under Applications.</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <CohortScopePicker cohorts={data.cohorts} activeCohortId={data.activeCohortId} />
@@ -93,13 +94,15 @@ export default async function ActiveStudentsPage({
                 </div>
             </div>
 
+            <PipelineNote current="students" counts={{ students: data.enrollments.length }} />
+
             {/* Stats Row */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                    { title: "Student Accounts", value: data.students.length.toString(), icon: Users, color: "blue" },
+                    { title: "Enrolled", value: data.enrollments.length.toString(), icon: Users, color: "blue" },
                     { title: "Total Collected", value: `GHS ${data.money.totalCollected.toLocaleString()}`, icon: Banknote, color: "emerald" },
-                    { title: "Outstanding", value: `GHS ${data.money.outstandingBalance.toLocaleString()}`, icon: CreditCard, color: "amber" },
-                    { title: "Fully Paid", value: data.money.fullyPaidCount.toString(), icon: GraduationCap, color: "purple" },
+                    { title: "Still owed", value: `GHS ${data.money.outstandingBalance.toLocaleString()}`, icon: CreditCard, color: "amber" },
+                    { title: "Paid in full", value: data.money.fullyPaidCount.toString(), icon: GraduationCap, color: "purple" },
                 ].map((stat, i) => (
                     <Card key={i} className="bg-white border-slate-200/60 rounded-2xl shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)]">
                         <CardContent className="p-5">
