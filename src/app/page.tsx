@@ -756,7 +756,7 @@ export default function HomePage() {
                   Your Engineering Career{" "}
                   <br className="hidden md:block" />
                   Starts{" "}
-                  <span className="text-amber-400">June 1.</span>
+                  <span className="text-amber-400">October 19.</span>
                 </h2>
                 <p className="text-slate-400 text-base leading-relaxed mb-6 max-w-md">
                   Professional Diploma, 1-month internship, your first paying client, and the chance to get hired —

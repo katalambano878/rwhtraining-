@@ -1,4 +1,4 @@
-/** Total masterclass program fee (Ghana Cedis) — June 2026 promotional price. */
+/** Total masterclass program fee (Ghana Cedis) — October 2026 promotional price. */
 export const COURSE_TOTAL_GHS = 1000;
 
 /** Initial checkout amount for each payment tier (20% / 50% / 100% of {@link COURSE_TOTAL_GHS}). */

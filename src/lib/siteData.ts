@@ -17,7 +17,7 @@ export const brand = {
     linkedin: "https://linkedin.com/company/remoteworkhub",
   },
   cohort: {
-    startDate: "June 1, 2026",
+    startDate: "October 19, 2026",
     duration: "4 Weeks",
     fee: "GHS 1,000",
     seats: 10,
@@ -328,7 +328,7 @@ export const faqs = [
   },
   {
     q: "What is the total program fee?",
-    a: "The full fee is GHS 1,000 for the complete 4-week program. This is a special promotional price for the June 2026 cohort. It covers all training, materials, your Professional Diploma, the 1-month internship placement, and the 100K Challenge client acquisition module. Every cedi is an investment in a skill set that pays you back for life.",
+    a: "The full fee is GHS 1,000 for the complete 4-week program. This is a special promotional price for the October 2026 cohort. It covers all training, materials, your Professional Diploma, the 1-month internship placement, and the 100K Challenge client acquisition module. Every cedi is an investment in a skill set that pays you back for life.",
   },
 ];
 

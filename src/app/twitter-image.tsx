@@ -88,7 +88,7 @@ export default function TwitterImage() {
           </span>
 
           <div style={{ display: "flex", gap: 28, marginTop: 36 }}>
-            {["Starts June 1", "GHS 1,000", "Accra, Ghana"].map((t) => (
+            {["Starts October 19", "GHS 1,000", "Accra, Ghana"].map((t) => (
               <div key={t} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#3b82f6", display: "flex" }} />
                 <span style={{ color: "#cbd5e1", fontSize: 14, fontWeight: 700 }}>{t}</span>

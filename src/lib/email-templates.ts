@@ -272,7 +272,7 @@ export const EMAIL_TEMPLATES = {
         <a href="{{login_url}}" class="btn btn-primary" style="display: inline-block; background: ${BRAND_COLOR}; color: #ffffff; padding: 15px 36px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 14px;">Access Your Dashboard &rarr;</a>
       </div>
       
-      <p style="font-size: 13px; color: #94a3b8; text-align: center;">We start on <strong style="color: #64748b;">June 1, 2026</strong>. Get ready to build something incredible.</p>
+      <p style="font-size: 13px; color: #94a3b8; text-align: center;">We start on <strong style="color: #64748b;">October 19, 2026</strong>. Get ready to build something incredible.</p>
     </div>
     `, "Your seat is secured! Welcome to the Elite Web Development Masterclass."),
   },
@@ -359,7 +359,7 @@ export const EMAIL_TEMPLATES = {
         <a href="{{login_url}}" class="btn btn-primary" style="display: inline-block; background: ${BRAND_COLOR}; color: #ffffff; padding: 15px 36px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 14px;">Go to Your Dashboard &rarr;</a>
       </div>
 
-      <p style="font-size: 13px; color: #94a3b8; text-align: center;">We start on <strong style="color: #64748b;">June 1, 2026</strong>. See you there!</p>
+      <p style="font-size: 13px; color: #94a3b8; text-align: center;">We start on <strong style="color: #64748b;">October 19, 2026</strong>. See you there!</p>
     </div>
     `, "Your payment is confirmed! Log in with your existing credentials."),
   },

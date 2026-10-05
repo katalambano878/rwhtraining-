@@ -60,9 +60,9 @@ const courseSchema = {
   timeRequired: "P4W",
   hasCourseInstance: {
     "@type": "CourseInstance",
-    name: "June 2026 Cohort",
-    startDate: "2026-06-01",
-    endDate: "2026-06-28",
+    name: "October 2026 Cohort",
+    startDate: "2026-10-19",
+    endDate: "2026-11-15",
     courseMode: "Hybrid",
     courseWorkload: "PT8H",
     instructor: {
@@ -88,7 +88,7 @@ const courseSchema = {
       availability: "https://schema.org/LimitedAvailability",
       url: `${APP_URL}/apply`,
       validFrom: "2026-01-01",
-      validThrough: "2026-06-01",
+      validThrough: "2026-10-19",
       category: "Web Development Training",
     },
   },
@@ -221,8 +221,8 @@ const eventSchema = {
   name: "2026 Elite Web Development & SaaS Masterclass",
   description:
     "4-week intensive hybrid web development training in Accra. Learn to build real business applications, complete a 1-month internship, and pursue your first client with guided support.",
-startDate: "2026-06-01T09:00:00+00:00",
-    endDate: "2026-06-28T17:00:00+00:00",
+startDate: "2026-10-19T09:00:00+00:00",
+    endDate: "2026-11-15T17:00:00+00:00",
   eventStatus: "https://schema.org/EventScheduled",
   eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
   location: {

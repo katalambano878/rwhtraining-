@@ -300,7 +300,7 @@ export default function FAQPage() {
               Ready to Apply?
             </h2>
             <p className="text-blue-100 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
-              The June 1 cohort fills fast. 10 seats. First come, first confirmed.
+              The October 19 cohort fills fast. 10 seats. First come, first confirmed.
             </p>
             <Link href="/apply" className="inline-flex items-center gap-2 h-14 px-10 bg-white text-blue-600 font-bold text-base rounded-xl hover:bg-blue-50 transition-all shadow-lg group">
               Apply Now — {brand.cohort.fee}

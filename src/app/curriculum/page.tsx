@@ -70,7 +70,7 @@ const programFeatures = [
   { icon: Users, label: "Max 10 Students", sub: "Elite, personalized mentorship" },
   { icon: Award, label: "Professional Diploma", sub: "Doctor Barns Tech award" },
   { icon: GraduationCap, label: "Internship Included", sub: "1-month at DBT" },
-  { icon: Calendar, label: "Starts June 1", sub: "2026 cohort" },
+  { icon: Calendar, label: "Starts October 19", sub: "2026 cohort" },
   { icon: Download, label: "All Materials Included", sub: "Code, resources & templates" },
 ];
 
@@ -293,8 +293,8 @@ export default function CurriculumPage() {
                   { label: "Weekly Structure", value: "1 onsite + 2 online meetings" },
                   { label: "Location", value: "111 Newtown RD, Accra Newtown" },
                   { label: "Cohort Start", value: brand.cohort.startDate },
-                  { label: "Program End", value: "May 31, 2026 (approx.)" },
-                  { label: "Internship", value: "June 2026 — 1 Month" },
+                  { label: "Program End", value: "November 15, 2026 (approx.)" },
+                  { label: "Internship", value: "November 2026 — 1 Month" },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200">
                     <span className="text-slate-600 text-sm font-medium">{item.label}</span>
@@ -391,7 +391,7 @@ export default function CurriculumPage() {
             <div className="absolute inset-0 grid-overlay-dark opacity-40" />
             <div className="relative z-10">
               <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[10px] font-bold tracking-widest uppercase mb-6">
-                Enroll for June 2026
+                Enroll for October 2026
               </span>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4">
                 Program Fee: <span className="text-amber-400">{brand.cohort.fee}</span>

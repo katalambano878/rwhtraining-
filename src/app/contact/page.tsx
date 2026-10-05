@@ -55,7 +55,7 @@ const contactMethods = [
 ];
 
 const faqs = [
-  { q: "When does the June cohort start?", a: `June 1, 2026. Training runs Mon–Sat, 8am–5pm, for 4 weeks.` },
+  { q: "When does the October cohort start?", a: `October 19, 2026. Training runs Mon–Sat, 8am–5pm, for 4 weeks.` },
   { q: "How do I secure my seat?", a: "Apply via the application form. Upon review, we'll reach out to confirm your spot and provide payment details." },
   { q: "Is there a payment plan?", a: `Yes. Contact us on WhatsApp (${brand.phone}) to arrange a deposit and installment structure.` },
   { q: "Where is the training held?", a: `Hybrid format: one onsite session at ${brand.address} plus two online sessions each week.` },
@@ -64,7 +64,7 @@ const faqs = [
 type FormState = "idle" | "sending" | "sent" | "error";
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "", interest: "Apply for June Cohort" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "", interest: "Apply for October Cohort" });
   const [formState, setFormState] = useState<FormState>("idle");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -176,7 +176,7 @@ export default function ContactPage() {
                     WhatsApp us at <strong>{brand.phone}</strong>.
                   </p>
                   <Link href="/apply" className="inline-flex items-center gap-2 px-7 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors">
-                    Apply for June Cohort
+                    Apply for October Cohort
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </motion.div>
@@ -233,7 +233,7 @@ export default function ContactPage() {
                       onChange={(e) => setForm({ ...form, interest: e.target.value })}
                       className="w-full h-12 px-4 rounded-xl border border-slate-200 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
                     >
-                      <option>Apply for June Cohort</option>
+                      <option>Apply for October Cohort</option>
                       <option>Payment Plan Inquiry</option>
                       <option>Curriculum Questions</option>
                       <option>Corporate / Group Training</option>

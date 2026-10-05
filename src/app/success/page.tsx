@@ -418,7 +418,7 @@ export default function SuccessPage() {
             transition={{ duration: 0.7 }}
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
-              Your Story Starts June 1.
+              Your Story Starts October 19.
             </h2>
             <p className="text-blue-100 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
               Every graduate on this page started exactly where you are right now. Ten seats.

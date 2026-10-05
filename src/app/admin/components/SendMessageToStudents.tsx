@@ -14,7 +14,7 @@ const EMAIL_TEMPLATES = [
     {
         name: "Welcome Message",
         subject: "Welcome to the Masterclass — You're In!",
-        body: `Hi {{first_name}},\n\nWelcome to the Elite Web Development & SaaS Masterclass!\n\nYour seat is officially secured. Here are your next steps:\n\n1. Log into your student dashboard\n2. Review the prep materials\n3. Join our Discord community\n\nWe start on June 1, 2026. Get excited!\n\nBest,\nThe Remote Work Hub Team`,
+        body: `Hi {{first_name}},\n\nWelcome to the Elite Web Development & SaaS Masterclass!\n\nYour seat is officially secured. Here are your next steps:\n\n1. Log into your student dashboard\n2. Review the prep materials\n3. Join our Discord community\n\nWe start on October 19, 2026. Get excited!\n\nBest,\nThe Remote Work Hub Team`,
     },
     {
         name: "Payment Reminder",
