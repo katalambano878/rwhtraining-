@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Apply Now — Elite Web Development Masterclass",
   description:
-    "Apply for the October 2026 Elite 4-Week Web Development Masterclass. No experience needed. GHS 1,000 total (promotional price). Deposit options available. Professional Diploma, 1-month internship, and hybrid delivery. Accra, Ghana.",
+    "Apply for the October 2026 Elite 4-Week Web Development Masterclass. No experience needed. GHS 1,000 total (promotional price), paid in full. Professional Diploma, 1-month internship, and hybrid delivery. Accra, Ghana.",
   alternates: {
     canonical: "https://remoteworkhub.org/apply",
   },
