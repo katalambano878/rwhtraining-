@@ -136,12 +136,12 @@ export default function HomePage() {
         <Container className="relative z-10 w-full flex items-center min-h-[71vh]">
           <div className="w-full max-w-2xl mr-auto">
             <div className="space-y-4 md:space-y-6 flex flex-col items-start text-left w-full">
-              <motion.div variants={FADE_UP} className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-500/10 border border-blue-400/20 text-blue-200 text-[10px] md:text-[11px] font-bold uppercase tracking-wider rounded-full backdrop-blur-md font-sans shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+              <motion.div variants={FADE_UP} className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-amber-400/15 border border-amber-300/40 text-amber-200 text-[11px] md:text-xs font-bold uppercase tracking-wider rounded-full backdrop-blur-md font-sans">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-300"></span>
                 </span>
-                2026 Elite Masterclass · Limited Priority Spots
+                Starts {brand.cohort.startDate}
               </motion.div>
 
               <motion.h1
@@ -192,12 +192,14 @@ export default function HomePage() {
                 </Link>
                 <div className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 sm:py-0 sm:bg-transparent sm:border-0 sm:px-0 w-full sm:w-auto sm:pl-6 sm:border-l h-auto sm:h-12">
                   <div className="flex flex-col justify-center text-left">
-                    <span className="text-[10px] text-blue-300 font-bold uppercase tracking-widest mb-1">Program Fee</span>
-                    <span className="text-2xl font-black text-white leading-none tracking-tight drop-shadow-md">GHS 1,000</span>
+                    <span className="text-[10px] text-amber-200 font-bold uppercase tracking-widest mb-1">Starts</span>
+                    <span className="text-lg font-black text-white leading-none tracking-tight">October 19</span>
                   </div>
-                  <span className="text-[10px] uppercase tracking-wider font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-400/20 px-2 py-1 rounded-full">
-                    Installments available
-                  </span>
+                  <div className="flex flex-col items-end justify-center text-right">
+                    <span className="text-[10px] text-blue-300 font-bold uppercase tracking-widest mb-1">Program Fee</span>
+                    <span className="text-2xl font-black text-white leading-none tracking-tight">GHS 1,000</span>
+                    <span className="text-[10px] text-emerald-300 font-bold uppercase tracking-wider mt-1">Installments available</span>
+                  </div>
                 </div>
               </motion.div>
             </div>
