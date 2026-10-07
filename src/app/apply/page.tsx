@@ -15,7 +15,7 @@ import { autosaveApplicationAction } from "@/app/actions/autosave";
 export default function ApplyPage() {
     const [step, setStep] = useState(1);
     const [applicationId, setApplicationId] = useState<string | null>(null);
-    const [selectedTier, setSelectedTier] = useState("50");
+    const selectedTier = "100";
     const [paymentMethod, setPaymentMethod] = useState<"moolre" | "paystack">("moolre");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const totalSteps = 4;
@@ -170,7 +170,7 @@ export default function ApplyPage() {
                                     {step === 1 && "Personal Details"}
                                     {step === 2 && "Profile & Background"}
                                     {step === 3 && "Motivation & Commitment"}
-                                    {step === 4 && "Select Enrollment Tier"}
+                                    {step === 4 && "Pay in Full"}
                                 </span>
                             </div>
                             <span className="text-xs font-bold text-[#2563EB] tracking-[0.2em]">
@@ -334,67 +334,13 @@ export default function ApplyPage() {
                         <div id="step-4" className={`space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 ${step === 4 ? 'block' : 'hidden'}`}>
                             <div>
                                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-2 sm:mb-3 tracking-tight text-slate-900">Final Step: Secure Seat.</h2>
-                                <p className="text-slate-600 text-base sm:text-lg leading-relaxed">How would you like to handle your enrollment fee today? Completing this blocks your seat out of the 10 available.</p>
+                                <p className="text-slate-600 text-base sm:text-lg leading-relaxed">The fee is paid in full. This payment secures your seat.</p>
                             </div>
 
-                            <div className="space-y-4">
-                                {/* Tier 1: Deposit */}
-                                <button
-                                    type="button"
-                                    onClick={() => setSelectedTier("20")}
-                                    className={`group relative w-full flex items-center justify-between p-6 rounded-2xl border bg-white cursor-pointer transition-all duration-500 text-left overflow-hidden ${selectedTier === "20" ? "border-[#2563EB] bg-blue-50/30 shadow-[0_4px_20px_rgba(37,99,235,0.1)]" : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"}`}
-                                >
-                                    <div className={`absolute top-0 left-0 w-1 p-0 h-full bg-[#2563EB]/50 transition-transform duration-500 origin-bottom ${selectedTier === "20" ? 'scale-y-100' : 'scale-y-0 group-hover:scale-y-100'}`} />
-                                    <div className="flex gap-4 items-center pl-2 relative z-10">
-                                        <div className={`w-5 h-5 rounded-full border transition-colors flex items-center justify-center shrink-0 ${selectedTier === "20" ? "border-[#2563EB] bg-[#2563EB]" : "border-slate-300 group-hover:border-slate-400"}`}>
-                                            {selectedTier === "20" && <div className="w-2 h-2 bg-white rounded-full shadow-sm" />}
-                                        </div>
-                                        <div>
-                                            <span className="block text-[17px] tracking-wide font-bold text-slate-900 mb-1 transition-colors">20% Deposit <span className={`font-medium ml-2 text-sm transition-colors ${selectedTier === "20" ? "text-[#2563EB]/80" : "text-slate-500"}`}>(GHS 200)</span></span>
-                                            <span className="text-[15px] font-medium text-slate-500 transition-colors">Lock your seat now, pay the rest later.</span>
-                                        </div>
-                                    </div>
-                                </button>
-
-                                {/* Tier 2: 50% (Recommended) */}
-                                <button
-                                    type="button"
-                                    onClick={() => setSelectedTier("50")}
-                                    className={`group relative w-full flex items-center justify-between p-6 rounded-2xl border bg-white cursor-pointer transition-all duration-500 text-left overflow-hidden ${selectedTier === "50" ? "border-[#2563EB] shadow-[0_4px_30px_rgba(37,99,235,0.05)] bg-[#2563EB]/[0.02]" : "border-blue-200 hover:border-blue-300 hover:bg-blue-50/30"}`}
-                                >
-                                    <div className="absolute right-0 top-0 bg-[#2563EB] text-white text-[10px] font-bold px-4 py-1.5 uppercase tracking-widest rounded-bl-xl shadow-sm">Recommended</div>
-                                    <div className={`absolute top-0 left-0 w-1.5 p-0 h-full bg-[#2563EB] transition-transform duration-500 origin-bottom ${selectedTier === "50" ? 'scale-y-100' : 'scale-y-0 group-hover:scale-y-100 shadow-[0_0_15px_rgba(37,99,235,1)]'}`} />
-                                    <div className="absolute inset-0 bg-[#2563EB]/5 blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
-
-                                    <div className="flex gap-4 items-center pl-2 relative z-10">
-                                        <div className={`w-5 h-5 rounded-full border transition-colors flex items-center justify-center shrink-0 ${selectedTier === "50" ? "border-[#2563EB] bg-[#2563EB]" : "border-blue-300 group-hover:border-blue-400"}`}>
-                                            {selectedTier === "50" && <div className="w-2 h-2 bg-white rounded-full shadow-sm" />}
-                                        </div>
-                                        <div>
-                                            <span className={`block text-[17px] tracking-wide font-bold mb-1 transition-colors ${selectedTier === "50" ? "text-slate-900" : "text-slate-900"}`}>50% Half-Payment <span className={`font-medium ml-2 text-sm transition-colors ${selectedTier === "50" ? "text-[#2563EB]" : "text-blue-600/60"}`}>(GHS 500)</span></span>
-                                            <span className="text-[15px] font-medium text-slate-500 transition-colors">Access all initial portal features immediately.</span>
-                                        </div>
-                                    </div>
-                                </button>
-
-                                {/* Tier 3: 100% */}
-                                <button
-                                    type="button"
-                                    onClick={() => setSelectedTier("100")}
-                                    className={`group relative w-full flex items-center justify-between p-6 rounded-2xl border bg-white cursor-pointer transition-all duration-500 text-left overflow-hidden ${selectedTier === "100" ? "border-[#2563EB] bg-blue-50/30 shadow-[0_4px_20px_rgba(37,99,235,0.1)]" : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"}`}
-                                >
-                                    <div className={`absolute top-0 left-0 w-1 p-0 h-full bg-[#2563EB]/50 transition-transform duration-500 origin-bottom ${selectedTier === "100" ? 'scale-y-100' : 'scale-y-0 group-hover:scale-y-100'}`} />
-
-                                    <div className="flex gap-4 items-center pl-2 relative z-10">
-                                        <div className={`w-5 h-5 rounded-full border transition-colors flex items-center justify-center shrink-0 ${selectedTier === "100" ? "border-[#2563EB] bg-[#2563EB]" : "border-slate-300 group-hover:border-slate-400"}`}>
-                                            {selectedTier === "100" && <div className="w-2 h-2 bg-white rounded-full shadow-sm" />}
-                                        </div>
-                                        <div>
-                                            <span className={`block text-[17px] tracking-wide font-bold mb-1 transition-colors ${selectedTier === "100" ? "text-slate-900" : "text-slate-900"}`}>100% Full Payment <span className="text-slate-500 font-medium ml-2 text-sm">(GHS 1,000)</span></span>
-                                            <span className="text-[15px] font-medium text-slate-500 transition-colors">Zero distractions. Full VIP priority boarding.</span>
-                                        </div>
-                                    </div>
-                                </button>
+                            <div className="rounded-2xl border border-[#2563EB] bg-blue-50/40 p-6 shadow-[0_4px_20px_rgba(37,99,235,0.08)]">
+                                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#2563EB]">Enrollment fee</p>
+                                <p className="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">GHS 1,000</p>
+                                <p className="mt-2 text-[15px] font-medium text-slate-600">Full payment only. No deposit or installment option.</p>
                             </div>
 
                             {/* Payment Method Selector */}

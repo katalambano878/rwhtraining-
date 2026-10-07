@@ -194,7 +194,6 @@ export default function HomePage() {
                   <div className="flex flex-col items-end justify-center text-right">
                     <span className="text-[10px] text-blue-300 font-bold uppercase tracking-widest mb-1">Program Fee</span>
                     <span className="text-2xl font-black text-white leading-none tracking-tight">GHS 1,000</span>
-                    <span className="text-[10px] text-emerald-300 font-bold uppercase tracking-wider mt-1">Installments available</span>
                   </div>
                 </div>
               </motion.div>

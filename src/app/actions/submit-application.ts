@@ -1,7 +1,7 @@
 "use server";
 
 import { MoolreAdapter, type PaymentTier, type MomoNetwork, type TransactionPayload } from "@/lib/moolre-adapter";
-import { tierInitialAmountGhs } from "@/lib/pricing";
+import { COURSE_TOTAL_GHS } from "@/lib/pricing";
 import { PaystackAdapter } from "@/lib/paystack-adapter";
 import { createClient } from "@/lib/db";
 import { applicationSchema } from "@/lib/validations";
@@ -18,7 +18,7 @@ export async function submitApplicationAction(formData: FormData) {
         occupation: (formData.get("occupation") as string) || "",
         experience: (formData.get("experience") as string) || "",
         reason: (formData.get("reason") as string) || "",
-        tier: (formData.get("tier") as string) || "50",
+        tier: "100",
         paymentMethod: (formData.get("paymentMethod") as string) || "moolre",
     };
 
@@ -31,7 +31,7 @@ export async function submitApplicationAction(formData: FormData) {
     const { firstName, lastName, email, phone, age, city, occupation, experience, reason, tier, paymentMethod, applicationId } = parsed.data;
     const usePaystack = paymentMethod === "paystack";
 
-    const amount_ghs = tierInitialAmountGhs(tier);
+    const amount_ghs = COURSE_TOTAL_GHS;
 
     const reference = MoolreAdapter.generateReference();
 
