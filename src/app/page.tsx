@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { motion, Variants, AnimatePresence } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import {
   ArrowRight, CheckCircle2, Rocket, GraduationCap,
   MapPin, Globe, Flame, Monitor, Building2, Briefcase, Target,
@@ -95,29 +95,25 @@ export default function HomePage() {
       {/* ─── HERO ─── */}
       <section className="relative min-h-[88vh] md:min-h-[99vh] bg-[#0a192f] flex items-center pt-16 md:pt-20 pb-10 md:pb-12 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <AnimatePresence mode="wait">
+          {heroSlides.map((slide, idx) => (
             <motion.div
-              key={heroSlides[activeHeroSlide].src}
-              initial={{ opacity: 0.2, scale: 1.03 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0.2, scale: 1.02 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              key={slide.src}
+              initial={false}
+              animate={{ opacity: idx === activeHeroSlide ? 1 : 0 }}
+              transition={{ duration: 1.1, ease: "easeInOut" }}
               className="absolute inset-0"
             >
               <Image
-                src={heroSlides[activeHeroSlide].src}
-                alt={heroSlides[activeHeroSlide].alt}
+                src={slide.src}
+                alt={slide.alt}
                 fill
-                className={`object-cover ${heroSlides[activeHeroSlide].position}`}
+                className={`object-cover ${slide.position}`}
                 sizes="100vw"
-                priority
+                priority={idx === 0}
               />
             </motion.div>
-          </AnimatePresence>
-          <div className="absolute inset-0 bg-[#0a192f]/36 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a192f]/82 via-[#0a192f]/62 to-transparent" />
-          <div className="absolute inset-0 md:hidden bg-gradient-to-b from-[#0a192f]/50 via-transparent to-[#0a192f]/75" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,_var(--tw-gradient-stops))] from-blue-600/20 via-blue-900/5 to-transparent" />
+          ))}
+          <div className="absolute inset-0 bg-[#0a192f]/[0.18]" />
           <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2">
             {heroSlides.map((slide, idx) => (
               <button
