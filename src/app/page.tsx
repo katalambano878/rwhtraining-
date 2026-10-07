@@ -135,7 +135,7 @@ export default function HomePage() {
 
         <Container className="relative z-10 w-full flex items-center min-h-[71vh]">
           <div className="w-full max-w-2xl mr-auto">
-            <div className="space-y-5 md:space-y-6 flex flex-col items-start text-left w-full">
+            <div className="space-y-4 md:space-y-6 flex flex-col items-start text-left w-full">
               <motion.div variants={FADE_UP} className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-500/10 border border-blue-400/20 text-blue-200 text-[10px] md:text-[11px] font-bold uppercase tracking-wider rounded-full backdrop-blur-md font-sans shadow-[0_0_20px_rgba(59,130,246,0.15)]">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
@@ -148,7 +148,7 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-[2.65rem] sm:text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-white/80 tracking-tight leading-[1.06] font-sans drop-shadow-sm"
+                className="text-[2.15rem] sm:text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-white/80 tracking-tight leading-[1.08] font-sans drop-shadow-sm"
               >
                 Become a Professional <br className="hidden md:block" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-400 drop-shadow-md">Web Developer</span>{" "}
@@ -160,20 +160,20 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-[1.05rem] md:text-lg text-slate-300/90 font-light leading-relaxed max-w-xl font-sans"
+                className="text-[15px] md:text-lg text-slate-300/90 font-normal leading-snug max-w-md font-sans"
               >
-                This isn&apos;t another tutorial hell. We engineer absolute beginners into high-value developers capable of building the complex systems that corporate clients exactly pay for.
+                Beginners leave here able to build the systems clients pay for.
               </motion.p>
 
-              <motion.div variants={FADE_UP} className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-wrap gap-2.5 pt-1 w-full max-w-xl font-sans">
+              <motion.div variants={FADE_UP} className="flex flex-wrap gap-2 pt-0.5 w-full max-w-xl font-sans">
                 {[
                   { icon: CheckCircle2, text: "Professional Diploma", color: "text-blue-400" },
                   { icon: Flame, text: "Top 2 Get Hired", color: "text-blue-400" },
                   { icon: CheckCircle2, text: "No Experience Required", color: "text-blue-400" },
                 ].map((item) => (
-                  <div key={item.text} className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 hover:border-white/20 transition-colors backdrop-blur-md shadow-xl">
-                    <item.icon className={`w-4 h-4 ${item.color} shrink-0`} />
-                    <span className="text-[13px] font-semibold text-slate-200/90">{item.text}</span>
+                  <div key={item.text} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 backdrop-blur-md">
+                    <item.icon className={`w-3.5 h-3.5 ${item.color} shrink-0`} />
+                    <span className="text-[12px] md:text-[13px] font-semibold text-slate-200/90">{item.text}</span>
                   </div>
                 ))}
               </motion.div>
@@ -182,7 +182,7 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="flex flex-col sm:flex-row items-stretch sm:items-center justify-start gap-3.5 pt-4 md:pt-5 w-full font-sans"
+                className="flex flex-col sm:flex-row items-stretch sm:items-center justify-start gap-3 pt-1 md:pt-5 w-full font-sans"
               >
                 <Link href="/apply" className="group relative h-14 px-8 text-[15px] bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold transition-all duration-300 w-full sm:w-auto rounded-xl inline-flex items-center justify-center overflow-hidden shadow-[0_0_40px_rgba(37,99,235,0.3)] hover:shadow-[0_0_60px_rgba(37,99,235,0.5)]">
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
