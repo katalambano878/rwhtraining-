@@ -113,7 +113,7 @@ export default function HomePage() {
               />
             </motion.div>
           ))}
-          <div className="absolute inset-0 bg-[#0a192f]/[0.18]" />
+          <div className="absolute inset-0 bg-[#0a192f]/[0.30]" />
           <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2">
             {heroSlides.map((slide, idx) => (
               <button
