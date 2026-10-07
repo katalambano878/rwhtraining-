@@ -10,7 +10,8 @@ export const applicationSchema = z.object({
   occupation: z.string().max(200).optional().default(""),
   experience: z.string().max(200).optional().default(""),
   reason: z.string().max(2000).optional().default(""),
-  tier: z.enum(["20", "50", "100"]).default("50"),
+  classFormat: z.enum(["hybrid", "online"]).default("hybrid"),
+  tier: z.enum(["20", "50", "100"]).default("100"),
   paymentMethod: z.enum(["moolre", "paystack"]).default("moolre"),
   applicationId: z.string().optional().default(""),
 });
@@ -25,7 +26,8 @@ export const autosaveSchema = z.object({
   occupation: z.string().max(200).optional().default(""),
   experience: z.string().max(200).optional().default(""),
   reason: z.string().max(2000).optional().default(""),
-  tier: z.string().optional().default("50"),
+  classFormat: z.enum(["hybrid", "online"]).optional().default("hybrid"),
+  tier: z.string().optional().default("100"),
 });
 
 export const emailStudentsSchema = z.object({

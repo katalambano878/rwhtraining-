@@ -18,6 +18,7 @@ export async function submitApplicationAction(formData: FormData) {
         occupation: (formData.get("occupation") as string) || "",
         experience: (formData.get("experience") as string) || "",
         reason: (formData.get("reason") as string) || "",
+        classFormat: (formData.get("classFormat") as string) || "hybrid",
         tier: "100",
         paymentMethod: (formData.get("paymentMethod") as string) || "moolre",
     };
@@ -28,7 +29,7 @@ export async function submitApplicationAction(formData: FormData) {
         return { success: false, error: firstError, redirect_url: null };
     }
 
-    const { firstName, lastName, email, phone, age, city, occupation, experience, reason, tier, paymentMethod, applicationId } = parsed.data;
+    const { firstName, lastName, email, phone, age, city, occupation, experience, reason, classFormat, tier, paymentMethod, applicationId } = parsed.data;
     const usePaystack = paymentMethod === "paystack";
 
     const amount_ghs = COURSE_TOTAL_GHS;
@@ -59,6 +60,7 @@ export async function submitApplicationAction(formData: FormData) {
             occupation,
             experience,
             reason,
+            class_format: classFormat === "online" ? "online" : "hybrid",
             tier,
             amount_ghs,
             payment_reference: reference,

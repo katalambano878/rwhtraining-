@@ -22,6 +22,7 @@ export type ApplicationRecord = {
   phone?: string | null;
   age?: number | null;
   city?: string | null;
+  class_format?: string | null;
   occupation?: string | null;
   experience?: string | null;
   reason?: string | null;
@@ -292,6 +293,7 @@ export function ApplicationDetailModal({ application, onClose }: ApplicationDeta
               <DetailRow icon={Phone} label="Phone / WhatsApp" value={application.phone} />
               <DetailRow icon={User} label="Age" value={application.age != null ? `${application.age} years old` : null} />
               <DetailRow icon={MapPin} label="City / Location" value={application.city} />
+              <DetailRow icon={BookOpen} label="Class format" value={application.class_format === "online" ? "Online" : application.class_format === "hybrid" ? "Hybrid" : undefined} />
             </div>
           </section>
 

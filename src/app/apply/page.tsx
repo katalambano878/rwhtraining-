@@ -6,7 +6,6 @@ import { ArrowLeft, ArrowRight, ShieldCheck, CheckCircle2, CreditCard, Phone } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { submitApplicationAction } from "@/app/actions/submit-application";
@@ -17,8 +16,9 @@ export default function ApplyPage() {
     const [applicationId, setApplicationId] = useState<string | null>(null);
     const selectedTier = "100";
     const [paymentMethod, setPaymentMethod] = useState<"moolre" | "paystack">("moolre");
+    const [classFormat, setClassFormat] = useState<"hybrid" | "online">("hybrid");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const totalSteps = 4;
+    const totalSteps = 3;
     const progressPercent = (step / totalSteps) * 100;
 
     const handleNext = async () => {
@@ -40,6 +40,7 @@ export default function ApplyPage() {
             if (form) {
                 const formData = new FormData(form);
                 formData.set("tier", selectedTier);
+                formData.set("classFormat", classFormat);
                 const res = await autosaveApplicationAction(formData, applicationId || undefined);
                 if (res.success && res.id) {
                     setApplicationId(res.id);
@@ -64,6 +65,7 @@ export default function ApplyPage() {
             const formData = new FormData(form);
             // Append the selected tier since RadioGroup doesn't natively serialize
             formData.set("tier", selectedTier);
+            formData.set("classFormat", classFormat);
             formData.set("paymentMethod", paymentMethod);
             if (applicationId) {
                 formData.set("applicationId", applicationId);
@@ -169,15 +171,13 @@ export default function ApplyPage() {
                                 <span className="text-slate-900 font-serif text-lg tracking-wide hidden sm:block">
                                     {step === 1 && "Personal Details"}
                                     {step === 2 && "Profile & Background"}
-                                    {step === 3 && "Motivation & Commitment"}
-                                    {step === 4 && "Pay in Full"}
+                                    {step === 3 && "Pay in Full"}
                                 </span>
                             </div>
                             <span className="text-xs font-bold text-[#2563EB] tracking-[0.2em]">
                                 {step === 1 && "INITIATION"}
-                                {step === 2 && "ANALYSIS"}
-                                {step === 3 && "COMMITMENT"}
-                                {step === 4 && "SECURE SLOT"}
+                                {step === 2 && "BACKGROUND"}
+                                {step === 3 && "SECURE SLOT"}
                             </span>
                         </div>
 
@@ -232,6 +232,29 @@ export default function ApplyPage() {
                                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-full h-1/2 bg-[#2563EB]/5 blur-[20px] opacity-0 group-focus-within:opacity-100 transition-opacity duration-1000 pointer-events-none rounded-full" />
                                     <Input id="age" name="age" type="number" min="14" max="99" placeholder="e.g. 24" className="relative z-10 h-14 bg-white border-slate-200 rounded-2xl px-5 text-base focus:border-[#2563EB]/40 focus:ring-1 focus:ring-[#2563EB]/20 text-slate-900 placeholder:text-slate-400 shadow-sm transition-all" required />
                                 </div>
+                            </div>
+
+                            <div className="space-y-3">
+                                <Label className="text-slate-500 font-bold uppercase tracking-widest text-xs">Class format</Label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setClassFormat("hybrid")}
+                                        className={`rounded-2xl border p-4 text-left transition-colors ${classFormat === "hybrid" ? "border-[#2563EB] bg-blue-50" : "border-slate-200 bg-white"}`}
+                                    >
+                                        <span className="block text-[15px] font-bold text-slate-900">Hybrid class</span>
+                                        <span className="mt-1 block text-sm text-slate-600">1 onsite session and 2 online sessions each week.</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setClassFormat("online")}
+                                        className={`rounded-2xl border p-4 text-left transition-colors ${classFormat === "online" ? "border-[#2563EB] bg-blue-50" : "border-slate-200 bg-white"}`}
+                                    >
+                                        <span className="block text-[15px] font-bold text-slate-900">Online class</span>
+                                        <span className="mt-1 block text-sm text-slate-600">Attend every session online.</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="classFormat" value={classFormat} />
                             </div>
 
                             <div className="space-y-3 relative group">
@@ -301,37 +324,8 @@ export default function ApplyPage() {
                             </div>
                         </div>
 
-                        {/* Step 3: Motivation */}
+                        {/* Step 3: Payment */}
                         <div id="step-3" className={`space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 ${step === 3 ? 'block' : 'hidden'}`}>
-                            <div>
-                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-2 sm:mb-3 tracking-tight text-slate-900">Your Drive.</h2>
-                                <p className="text-slate-600 text-base sm:text-lg leading-relaxed">We don't do theoretical padding. Prove your ambition to claim a seat.</p>
-                            </div>
-
-                            <div className="space-y-4">
-                                <Label htmlFor="reason" className="text-[#2563EB] font-bold uppercase tracking-widest text-xs">Why you over thousands of others?</Label>
-                                <div className="relative group">
-                                    <div className="absolute inset-0 bg-[#2563EB]/10 blur-[40px] opacity-0 group-focus-within:opacity-100 transition-opacity duration-1000 pointer-events-none rounded-2xl" />
-                                    <Textarea id="reason" name="reason" placeholder="I am tired of basic tutorials. I want to engineer production-ready apps..." className="relative min-h-[180px] bg-white border-slate-200 rounded-2xl p-6 text-[15px] focus:border-[#2563EB]/40 focus:ring-1 focus:ring-[#2563EB]/20 resize-none leading-relaxed text-slate-900 placeholder:text-slate-400 transition-all z-10 shadow-sm" required />
-                                </div>
-                            </div>
-
-                            <div className="space-y-4 pt-6">
-                                {/* Commit Card */}
-                                <div className="flex items-start gap-4 p-5 rounded-2xl border border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50 transition-all duration-500 shadow-sm relative overflow-hidden group">
-                                    <div className="absolute top-0 left-0 w-1 p-0 h-full bg-[#2563EB]/30 scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-bottom" />
-                                    <Checkbox id="commit" name="commit" className="mt-1 w-5 h-5 border-slate-300 data-[state=checked]:bg-[#2563EB] data-[state=checked]:border-[#2563EB] data-[state=checked]:text-white shrink-0 transition-colors" required />
-                                    <div className="space-y-1.5 pt-0.5 w-full">
-                                        <Label htmlFor="commit" className="cursor-pointer text-[15px] font-bold text-slate-900 block">Savage Execution Required</Label>
-                                        <Label htmlFor="commit" className="cursor-pointer text-sm text-slate-600 leading-relaxed font-medium block">I understand this is a highly practical execution program. I commit to putting in the necessary hours. Results strictly depend on my execution.</Label>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        {/* Step 4: Payment Target */}
-                        <div id="step-4" className={`space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 ${step === 4 ? 'block' : 'hidden'}`}>
                             <div>
                                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-2 sm:mb-3 tracking-tight text-slate-900">Final Step: Secure Seat.</h2>
                                 <p className="text-slate-600 text-base sm:text-lg leading-relaxed">The fee is paid in full. This payment secures your seat.</p>

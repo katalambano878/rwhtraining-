@@ -160,7 +160,7 @@ export function ApplicationsListWithDetail({
                   <tr className="border-b border-slate-100 bg-slate-50/30">
                     <th className="text-left px-6 py-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Applicant</th>
                     <th className="text-left px-4 py-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">City</th>
-                    <th className="text-left px-4 py-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Tier</th>
+                    <th className="text-left px-4 py-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Class</th>
                     <th className="text-center px-4 py-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Status</th>
                     <th className="text-center px-4 py-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Payment</th>
                     <th className="text-right px-6 py-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Date</th>
@@ -185,7 +185,7 @@ export function ApplicationsListWithDetail({
                         </div>
                       </td>
                       <td className="px-4 py-4 text-[12px] font-medium text-slate-600">{app.city || "—"}</td>
-                      <td className="px-4 py-4 text-[13px] font-bold text-slate-600">{app.tier ? `${app.tier}%` : "—"}</td>
+                      <td className="px-4 py-4 text-[13px] font-bold text-slate-600">{app.class_format === "online" ? "Online" : "Hybrid"}</td>
                       <td className="px-4 py-4 text-center">
                         <span className={`text-[10px] font-extrabold px-2.5 py-1 rounded-md border uppercase tracking-widest ${statusColor(app.status)}`}>
                           {app.status === "PENDING_REVIEW" ? "Waiting" : app.status === "APPROVED" ? "Approved" : app.status === "REJECTED" ? "Rejected" : app.status === "WAITLISTED" ? "Waitlisted" : "—"}

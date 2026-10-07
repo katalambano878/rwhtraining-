@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS public.applications (
   email text NOT NULL,
   phone text,
   city text,
+  age integer,
+  class_format text NOT NULL DEFAULT 'hybrid',
   occupation text,
   experience text,
   reason text,
