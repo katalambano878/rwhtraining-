@@ -217,11 +217,12 @@ class Query {
   private where(startAt = 1): { sql: string; values: unknown[] } {
     const values: unknown[] = [];
     const clauses: string[] = [];
+    const placeholder = () => `$${startAt + values.length - 1}`;
     const push = (filter: Filter) => {
       const column = ident(filter.column);
       if (filter.op === "in") {
         values.push(filter.value.map((item) => String(item)));
-        clauses.push(`${column}::text = ANY($${values.length}::text[])`);
+        clauses.push(`${column}::text = ANY(${placeholder()}::text[])`);
         return;
       }
       if (filter.op === "is") {
@@ -234,7 +235,7 @@ class Query {
       }
       values.push(filter.value);
       const op = filter.op === "eq" ? "=" : filter.op === "neq" ? "<>" : filter.op === "gte" ? ">=" : filter.op === "gt" ? ">" : "ILIKE";
-      clauses.push(`${column} ${op} $${values.length}`);
+      clauses.push(`${column} ${op} ${placeholder()}`);
     };
     for (const filter of this.filters) push(filter);
     if (this.orGroup?.length) {
@@ -243,7 +244,6 @@ class Query {
       const orSql = clauses.splice(before).join(" OR ");
       if (orSql) clauses.push(`(${orSql})`);
     }
-    void startAt;
     return { sql: clauses.length ? ` WHERE ${clauses.join(" AND ")}` : "", values };
   }
 
@@ -322,9 +322,12 @@ class Query {
     const values = keys.map((key) => sqlValue(row[key]));
     const sets = keys.map((key, i) => `${ident(key)} = $${i + 1}`).join(", ");
     const where = this.where(keys.length + 1);
-    const sql = `UPDATE ${ident(this.table)} SET ${sets}${where.sql}`;
-    await getPool().query(sql, [...values, ...where.values]);
-    return { data: null, error: null, count: null };
+    const sql = `UPDATE ${ident(this.table)} SET ${sets}${where.sql}${this.returning ? " RETURNING *" : ""}`;
+    const result = await getPool().query(sql, [...values, ...where.values]);
+    if (!this.returning) return { data: null, error: null, count: null };
+    const rows = result.rows.map(normalizeRow);
+    const selected = this.columns === "*" ? rows : rows.map((row) => project(row, this.columns));
+    return shapeRows(selected, this.mode, null);
   }
 
   private async runDelete() {

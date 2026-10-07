@@ -52,10 +52,19 @@ export async function autosaveApplicationAction(formData: FormData, applicationI
             return { success: false, error: "Not enough info to save draft" };
         }
 
+        const { data: activeCohort } = await supabase
+            .from("cohorts")
+            .select("id")
+            .eq("is_active", true)
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
         const { data: app, error } = await supabase
             .from("applications")
             .insert({
                 ...data,
+                cohort_id: activeCohort?.id || null,
                 created_at: new Date().toISOString(),
             })
             .select()

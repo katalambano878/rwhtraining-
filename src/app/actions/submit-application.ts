@@ -71,25 +71,36 @@ export async function submitApplicationAction(formData: FormData) {
             updated_at: new Date().toISOString(),
         };
 
-        let appError;
+        let savedId: string | null = null;
+        let appError = null;
         if (applicationId) {
-            const { error } = await supabase.from("applications")
+            const { data, error } = await supabase.from("applications")
                 .update(applicationData)
-                .eq("id", applicationId);
+                .eq("id", applicationId)
+                .select("id");
             appError = error;
-        } else {
-            const { error } = await supabase.from("applications").insert({
+            savedId = data?.[0]?.id ?? null;
+        }
+        if (!savedId) {
+            const { data, error } = await supabase.from("applications").insert({
                 ...applicationData,
                 created_at: new Date().toISOString(),
-            });
+            }).select("id").single();
             appError = error;
+            savedId = data?.id ?? null;
         }
 
-        if (appError) {
+        if (appError || !savedId) {
             console.error("[RWH] Failed to save application:", appError);
+            return {
+                success: false,
+                error: "We couldn't save your application. Please try again or contact us on WhatsApp.",
+                redirect_url: null,
+            };
         }
 
         const { error: payError } = await supabase.from("payments").insert({
+            application_id: savedId,
             reference,
             email,
             phone,
