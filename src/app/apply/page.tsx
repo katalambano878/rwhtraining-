@@ -15,7 +15,7 @@ export default function ApplyPage() {
     const [step, setStep] = useState(1);
     const [applicationId, setApplicationId] = useState<string | null>(null);
     const selectedTier = "100";
-    const [paymentMethod, setPaymentMethod] = useState<"moolre" | "paystack">("moolre");
+    const [paymentMethod, setPaymentMethod] = useState<"zoe" | "paystack">("zoe");
     const [classFormat, setClassFormat] = useState<"hybrid" | "online">("hybrid");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const totalSteps = 3;
@@ -346,9 +346,9 @@ export default function ApplyPage() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <button
                                         type="button"
-                                        onClick={() => setPaymentMethod("moolre")}
+                                        onClick={() => setPaymentMethod("zoe")}
                                         className={`flex items-start gap-4 p-5 rounded-2xl border text-left transition-all ${
-                                            paymentMethod === "moolre"
+                                            paymentMethod === "zoe"
                                                 ? "border-[#2563EB] bg-[#2563EB]/10 shadow-[0_0_20px_rgba(37,99,235,0.05)]"
                                                 : "border-slate-200 bg-white hover:border-slate-200"
                                         }`}

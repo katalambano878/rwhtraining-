@@ -11,10 +11,11 @@ function CheckoutDisplay() {
     const searchParams = useSearchParams();
     const amount = searchParams.get("amount") || "500";
     const ref = searchParams.get("ref") || "";
-    const gateway = searchParams.get("gateway") || "moolre";
+    const gateway = searchParams.get("gateway") || "zoe";
     const initialStatus = searchParams.get("status") || "pending";
     const returnPath = searchParams.get("returnPath") || "/";
     const isPaystack = gateway === "paystack";
+    const gatewayLabel = isPaystack ? "Paystack" : gateway === "moolre" ? "Moolre" : "Zoe Pay";
 
     const [paymentStatus, setPaymentStatus] = useState(initialStatus);
     const [checking, setChecking] = useState(false);
@@ -70,7 +71,7 @@ function CheckoutDisplay() {
                 <div className="h-10 w-auto bg-slate-50 p-2 rounded-lg flex items-center gap-2 border border-slate-200">
                     <Lock className="w-4 h-4 text-green-600" />
                     <span className="text-xs font-bold font-mono tracking-widest uppercase text-slate-700">
-                        {isPaystack ? "Paystack" : "Moolre"}
+                        {gatewayLabel}
                     </span>
                 </div>
             </div>
@@ -98,7 +99,7 @@ function CheckoutDisplay() {
                     <p className="text-slate-500 mb-6 max-w-md mx-auto">
                         {isPaystack
                             ? "Complete your payment on the secure page, or we are verifying your transaction."
-                            : "A payment prompt has been sent to your mobile phone. Please approve the transaction on your device to complete payment."}
+                            : "If you approved the payment on your phone, hold on while we confirm it. If you haven't paid yet, approve the prompt on your device."}
                     </p>
                     <div className="flex items-center justify-center gap-2 text-sm text-slate-400 mb-6">
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -174,7 +175,7 @@ function CheckoutDisplay() {
             {/* Security Footer */}
             <div className="mt-8 flex items-center justify-center gap-2 text-xs text-slate-400 font-medium border-t border-slate-100 pt-6">
                 <ShieldCheck className="w-4 h-4 text-green-500" />
-                Payments processed securely via {isPaystack ? "Paystack" : "Moolre"}.
+                Payments processed securely via {gatewayLabel}.
             </div>
         </div>
     );

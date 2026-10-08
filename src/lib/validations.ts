@@ -12,7 +12,8 @@ export const applicationSchema = z.object({
   reason: z.string().max(2000).optional().default(""),
   classFormat: z.enum(["hybrid", "online"]).default("hybrid"),
   tier: z.enum(["20", "50", "100"]).default("100"),
-  paymentMethod: z.enum(["moolre", "paystack"]).default("moolre"),
+  // "moolre" is accepted for cached clients but is routed to Zoe Pay.
+  paymentMethod: z.enum(["zoe", "moolre", "paystack"]).default("zoe"),
   applicationId: z.string().optional().default(""),
 });
 

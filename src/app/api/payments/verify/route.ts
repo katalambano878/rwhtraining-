@@ -2,12 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/db";
 import { MoolreAdapter } from "@/lib/moolre-adapter";
 import { PaystackAdapter } from "@/lib/paystack-adapter";
+import { verifyZoePayment } from "@/lib/zoe-pay";
 import { onboardPaidStudent } from "@/lib/onboard-paid-student";
 
 /**
  * GET /api/payments/verify?ref=RWH-xxx
- * Verifies payment status with the correct gateway (Moolre or Paystack).
- * On SUCCESS, updates Supabase and runs onboarding.
+ * Verifies payment status with the correct gateway (Zoe Pay, Paystack,
+ * or legacy Moolre). On SUCCESS, updates Supabase and runs onboarding.
  */
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest) {
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const supabaseServiceKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY;
 
-        let gateway = "moolre";
+        let gateway = "zoe";
         if (supabaseUrl && supabaseServiceKey) {
             const supabase = createClient(supabaseUrl, supabaseServiceKey);
             const { data: payment } = await supabase
@@ -37,8 +38,11 @@ export async function GET(request: NextRequest) {
         let result;
         if (gateway === "paystack") {
             result = await PaystackAdapter.verifyTransaction(reference);
-        } else {
+        } else if (gateway === "moolre") {
+            // Legacy: only payments created before the Zoe Pay cutover.
             result = await MoolreAdapter.verifyTransaction(reference);
+        } else {
+            result = await verifyZoePayment(reference);
         }
 
         if (result.status === "SUCCESS") {

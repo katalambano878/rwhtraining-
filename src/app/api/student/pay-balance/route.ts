@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/db";
-import { MoolreAdapter, type MomoNetwork, type PaymentTier } from "@/lib/moolre-adapter";
 import { PaystackAdapter } from "@/lib/paystack-adapter";
+import { createZoeCheckout, generateReference, toGhPhone } from "@/lib/zoe-pay";
 
 /**
  * POST /api/student/pay-balance
- * Initiates a balance payment via Moolre (Mobile Money) or Paystack (Card).
- * Body: { gateway: "moolre" | "paystack" }
+ * Initiates a balance payment via Zoe Pay (Mobile Money) or Paystack (Card).
+ * Body: { gateway: "zoe" | "paystack" }
  * Authenticated via Bearer token (student's Supabase access token).
  */
 export async function POST(request: NextRequest) {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json().catch(() => ({}));
-        const gateway: "moolre" | "paystack" = body.gateway === "paystack" ? "paystack" : "moolre";
+        const gateway: "zoe" | "paystack" = body.gateway === "paystack" ? "paystack" : "zoe";
 
         const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
         }
 
         const balanceDue = Number(enrollment.balance_due);
-        const reference = MoolreAdapter.generateReference();
+        const reference = generateReference();
         const phone = application.phone || "";
         const email = user.email || application.email;
         const firstName = application.first_name || "";
@@ -90,23 +90,25 @@ export async function POST(request: NextRequest) {
                 returnPath: "/student",
             });
         } else {
-            // Detect MoMo network from phone prefix (Ghana)
-            const cleanPhone = phone.replace(/\s+/g, "").replace(/^\+233/, "0").replace(/^233/, "0");
-            let network: MomoNetwork = "MTN";
-            if (cleanPhone.startsWith("020") || cleanPhone.startsWith("050")) network = "TELECEL";
-            else if (cleanPhone.startsWith("026") || cleanPhone.startsWith("056") || cleanPhone.startsWith("027") || cleanPhone.startsWith("057")) network = "AIRTELTIGO";
+            const zoePhone = toGhPhone(phone);
+            if (!zoePhone) {
+                return NextResponse.json(
+                    { error: "Your profile phone number is not a valid Ghana number. Please contact support." },
+                    { status: 400 },
+                );
+            }
 
-            // Save payment record for Moolre
+            // Save payment record for Zoe Pay
             await supabase.from("payments").insert({
                 reference,
                 email,
                 phone,
                 first_name: firstName,
                 last_name: lastName,
-                network,
+                network: "MOMO",
                 amount_ghs: balanceDue,
                 tier: application.tier || "50",
-                gateway: "moolre",
+                gateway: "zoe",
                 payment_type: "balance",
                 application_id: application.id,
                 status: "PENDING",
@@ -114,17 +116,33 @@ export async function POST(request: NextRequest) {
                 updated_at: new Date().toISOString(),
             });
 
-            gatewayRes = await MoolreAdapter.initializeTransaction({
-                email,
-                amount_ghs: balanceDue,
-                tier: (application.tier || "50") as PaymentTier,
-                phone,
-                network,
-                first_name: firstName,
-                last_name: lastName,
-                reference,
-                returnPath: "/student",
-            });
+            const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://remoteworkhub.org";
+
+            try {
+                const checkout = await createZoeCheckout({
+                    amountGhs: balanceDue,
+                    clientReference: reference,
+                    description: "Remote Work Hub Masterclass balance payment",
+                    customer: {
+                        name: `${firstName} ${lastName}`.trim() || email,
+                        email,
+                        phone: zoePhone,
+                    },
+                    returnUrl: `${appUrl}/apply/checkout?ref=${reference}&amount=${balanceDue}&gateway=zoe&returnPath=${encodeURIComponent("/student")}`,
+                });
+                gatewayRes = {
+                    checkout_url: checkout.checkoutUrl,
+                    status: "PENDING" as const,
+                    message: "Payment initiated.",
+                };
+            } catch (error) {
+                console.error("[Pay Balance] Zoe checkout error:", error);
+                gatewayRes = {
+                    checkout_url: null,
+                    status: "FAILED" as const,
+                    message: "Could not start the payment. Please try again.",
+                };
+            }
         }
 
         if (!gatewayRes.checkout_url || gatewayRes.status === "FAILED") {

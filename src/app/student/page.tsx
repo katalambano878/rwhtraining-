@@ -25,7 +25,7 @@ export default function StudentPortal() {
     const [activeTab, setActiveTab] = useState<Tab>("dashboard");
     const [showPayModal, setShowPayModal] = useState(false);
     const [payingBalance, setPayingBalance] = useState(false);
-    const [payingGateway, setPayingGateway] = useState<"moolre" | "paystack" | null>(null);
+    const [payingGateway, setPayingGateway] = useState<"zoe" | "paystack" | null>(null);
     const [payError, setPayError] = useState<string | null>(null);
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -75,7 +75,7 @@ export default function StudentPortal() {
         await fetchDashboardData();
     }
 
-    async function handlePayBalance(gateway: "moolre" | "paystack") {
+    async function handlePayBalance(gateway: "zoe" | "paystack") {
         if (!user) return;
         setPayingGateway(gateway);
         setPayingBalance(true);
@@ -587,7 +587,7 @@ export default function StudentPortal() {
                         <div className="space-y-3">
                             {/* Mobile Money */}
                             <button
-                                onClick={() => handlePayBalance("moolre")}
+                                onClick={() => handlePayBalance("zoe")}
                                 disabled={payingBalance}
                                 className="w-full flex items-center gap-4 p-5 rounded-2xl border border-white/10 bg-black/30 hover:border-amber-500/50 hover:bg-amber-500/5 transition-all group text-left"
                             >
@@ -598,7 +598,7 @@ export default function StudentPortal() {
                                     <p className="text-[14px] font-bold text-white">Mobile Money</p>
                                     <p className="text-[12px] text-gray-400 mt-0.5">MTN, Telecel, AirtelTigo — Ghana MoMo</p>
                                 </div>
-                                {payingBalance && payingGateway === "moolre"
+                                {payingBalance && payingGateway === "zoe"
                                     ? <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
                                     : <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-amber-400 transition-colors" />}
                             </button>

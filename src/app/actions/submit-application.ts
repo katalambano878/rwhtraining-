@@ -1,8 +1,8 @@
 "use server";
 
-import { MoolreAdapter, type PaymentTier, type MomoNetwork, type TransactionPayload } from "@/lib/moolre-adapter";
 import { COURSE_TOTAL_GHS } from "@/lib/pricing";
 import { PaystackAdapter } from "@/lib/paystack-adapter";
+import { createZoeCheckout, generateReference, toGhPhone } from "@/lib/zoe-pay";
 import { createClient } from "@/lib/db";
 import { applicationSchema } from "@/lib/validations";
 
@@ -20,7 +20,7 @@ export async function submitApplicationAction(formData: FormData) {
         reason: (formData.get("reason") as string) || "",
         classFormat: (formData.get("classFormat") as string) || "hybrid",
         tier: "100",
-        paymentMethod: (formData.get("paymentMethod") as string) || "moolre",
+        paymentMethod: (formData.get("paymentMethod") as string) || "zoe",
     };
 
     const parsed = applicationSchema.safeParse(raw);
@@ -34,7 +34,7 @@ export async function submitApplicationAction(formData: FormData) {
 
     const amount_ghs = COURSE_TOTAL_GHS;
 
-    const reference = MoolreAdapter.generateReference();
+    const reference = generateReference();
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseServiceKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY;
@@ -109,7 +109,7 @@ export async function submitApplicationAction(formData: FormData) {
             tier,
             first_name: firstName,
             last_name: lastName,
-            gateway: usePaystack ? "paystack" : "moolre",
+            gateway: usePaystack ? "paystack" : "zoe",
             status: "PENDING",
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
@@ -120,36 +120,64 @@ export async function submitApplicationAction(formData: FormData) {
         }
     }
 
-    let gatewayRes;
-
     if (usePaystack) {
-        gatewayRes = await PaystackAdapter.initializeTransaction({
+        const gatewayRes = await PaystackAdapter.initializeTransaction({
             email,
             amount_ghs,
             first_name: firstName,
             last_name: lastName,
             reference,
         });
-    } else {
-        const transactionPayload: TransactionPayload = {
-            email,
-            amount_ghs,
-            tier: tier as PaymentTier,
-            phone: phone,
-            network: "MTN",
-            first_name: firstName,
-            last_name: lastName,
-            reference,
+
+        return {
+            success: true,
+            error: null,
+            redirect_url: gatewayRes.checkout_url,
+            reference: gatewayRes.reference,
+            payment_status: gatewayRes.status,
+            message: gatewayRes.message,
         };
-        gatewayRes = await MoolreAdapter.initializeTransaction(transactionPayload);
     }
 
-    return {
-        success: true,
-        error: null,
-        redirect_url: gatewayRes.checkout_url,
-        reference: gatewayRes.reference,
-        payment_status: gatewayRes.status,
-        message: gatewayRes.message,
-    };
+    // Zoe Pay (Mobile Money and card) is the main gateway.
+    const zoePhone = toGhPhone(phone);
+    if (!zoePhone) {
+        return {
+            success: false,
+            error: "Please enter a valid Ghana phone number (e.g. 024 123 4567).",
+            redirect_url: null,
+        };
+    }
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://remoteworkhub.org";
+
+    try {
+        const checkout = await createZoeCheckout({
+            amountGhs: amount_ghs,
+            clientReference: reference,
+            description: "Remote Work Hub Elite Masterclass enrollment",
+            customer: {
+                name: `${firstName} ${lastName}`.trim(),
+                email,
+                phone: zoePhone,
+            },
+            returnUrl: `${appUrl}/apply/checkout?ref=${reference}&amount=${amount_ghs}&gateway=zoe`,
+        });
+
+        return {
+            success: true,
+            error: null,
+            redirect_url: checkout.checkoutUrl,
+            reference,
+            payment_status: "PENDING",
+            message: "Payment initiated.",
+        };
+    } catch (error) {
+        console.error("[RWH] Zoe checkout error:", error);
+        return {
+            success: false,
+            error: "We couldn't start your payment. Please try again or contact us on WhatsApp.",
+            redirect_url: null,
+        };
+    }
 }
