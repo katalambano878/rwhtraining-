@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ShieldCheck, CheckCircle2, CreditCard, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,23 +33,38 @@ export default function ApplyPage() {
             }
         }
 
-        // Autosave when moving to the next step
-        try {
-            const form = document.querySelector('form') as HTMLFormElement;
-            if (form) {
-                const formData = new FormData(form);
-                formData.set("tier", selectedTier);
-                formData.set("classFormat", classFormat);
-                const res = await autosaveApplicationAction(formData, applicationId || undefined);
-                if (res.success && res.id) {
-                    setApplicationId(res.id);
-                }
-            }
-        } catch (error) {
-            console.error("Autosave failed:", error);
-        }
+        await saveDraft();
 
         if (step < totalSteps) setStep(step + 1);
+    };
+
+    const draftIdRef = useRef<string | null>(null);
+    const lastSavedRef = useRef("");
+    const saveQueueRef = useRef<Promise<void>>(Promise.resolve());
+
+    // Saves run one after another so a visitor never creates two draft rows.
+    const saveDraft = () => {
+        const run = async () => {
+            const form = document.querySelector("form") as HTMLFormElement | null;
+            if (!form) return;
+            const formData = new FormData(form);
+            formData.set("tier", selectedTier);
+            formData.set("classFormat", classFormat);
+            const snapshot = JSON.stringify(Array.from(formData.entries()));
+            if (snapshot === lastSavedRef.current) return;
+            try {
+                const res = await autosaveApplicationAction(formData, draftIdRef.current || undefined);
+                if (res.success && res.id) {
+                    draftIdRef.current = res.id;
+                    lastSavedRef.current = snapshot;
+                    setApplicationId(res.id);
+                }
+            } catch (error) {
+                console.error("Autosave failed:", error);
+            }
+        };
+        saveQueueRef.current = saveQueueRef.current.then(run);
+        return saveQueueRef.current;
     };
 
     const handleBack = () => {
@@ -66,8 +81,10 @@ export default function ApplyPage() {
             formData.set("tier", selectedTier);
             formData.set("classFormat", classFormat);
             formData.set("paymentMethod", paymentMethod);
-            if (applicationId) {
-                formData.set("applicationId", applicationId);
+            await saveQueueRef.current;
+            const draftId = draftIdRef.current || applicationId;
+            if (draftId) {
+                formData.set("applicationId", draftId);
             }
 
             const res = await submitApplicationAction(formData);
@@ -192,7 +209,7 @@ export default function ApplyPage() {
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-8 min-h-[400px]">
+                    <form onSubmit={handleSubmit} onBlur={() => { void saveDraft(); }} className="space-y-8 min-h-[400px]">
 
                         {/* Step 1: Basics */}
                         <div id="step-1" className={`space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 ${step === 1 ? 'block' : 'hidden'}`}>
