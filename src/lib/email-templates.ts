@@ -646,7 +646,7 @@ export const EMAIL_TEMPLATES = {
 };
 
 /** Cohort WhatsApp group invite — ONLY include in post-payment messages */
-export const COHORT_WHATSAPP_LINK = "https://chat.whatsapp.com/JSZ2FL5X6VDHDuAXZ5vw8t";
+export const COHORT_WHATSAPP_LINK = "https://chat.whatsapp.com/L5zb4r6yjVfDMlXtgrZEb8";
 
 export const SMS_TEMPLATES = {
   payment_confirmation: {
