@@ -6,7 +6,6 @@ import { ArrowLeft, ArrowRight, ShieldCheck, CheckCircle2, CreditCard, Phone } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { submitApplicationAction } from "@/app/actions/submit-application";
 import { autosaveApplicationAction } from "@/app/actions/autosave";
@@ -310,17 +309,6 @@ export default function ApplyPage() {
                                         </div>
                                     </div>
                                 </RadioGroup>
-                            </div>
-
-                            <div className="pt-6">
-                                <div className="flex items-start gap-4 p-5 rounded-2xl border border-blue-200 bg-blue-50 hover:border-blue-300 transition-all duration-500 shadow-sm relative overflow-hidden group">
-                                    <div className="absolute top-0 left-0 w-1 p-0 h-full bg-[#2563EB]/50 scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-bottom" />
-                                    <Checkbox id="laptop" name="laptop" className="mt-1 w-5 h-5 border-blue-300 data-[state=checked]:bg-[#2563EB] data-[state=checked]:border-[#2563EB] data-[state=checked]:text-white shrink-0 transition-colors" required />
-                                    <div className="space-y-1.5 pt-0.5 w-full">
-                                        <Label htmlFor="laptop" className="cursor-pointer text-[15px] font-bold text-[#2563EB] block">Hardware & Internet Requirement</Label>
-                                        <Label htmlFor="laptop" className="cursor-pointer text-sm text-blue-700 leading-relaxed font-medium block">I confirm that I have access to a reliable, working laptop and an internet connection to participate in this cohort.</Label>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
