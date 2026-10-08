@@ -5,8 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Toaster } from "@/components/ui/toaster";
 import { StructuredData } from "@/components/StructuredData";
 import { PageViewTracker } from "@/components/PageViewTracker";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { SiteChrome } from "@/components/layout/SiteChrome";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -113,9 +112,7 @@ export default function RootLayout({
         <StructuredData />
       </head>
       <body className={`${inter.variable} ${jakarta.variable} antialiased font-sans bg-white text-slate-900`}>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
         <PageViewTracker />
         <Toaster />
         <Analytics />
