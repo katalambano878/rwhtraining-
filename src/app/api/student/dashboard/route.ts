@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/db";
+import { FIRST_CLASS_AT } from "@/lib/class-start";
 import { SESSION_COOKIE, verifySession } from "@/lib/session";
 
 export async function GET() {
@@ -15,9 +16,17 @@ export async function GET() {
     db.from("applications").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
   ]);
 
+  let classStartsAt = FIRST_CLASS_AT;
+  const cohortId = enrollRes.data?.cohort_id;
+  if (cohortId) {
+    const cohortRes = await db.from("cohorts").select("start_date").eq("id", cohortId).maybeSingle();
+    if (cohortRes.data?.start_date) classStartsAt = String(cohortRes.data.start_date);
+  }
+
   return NextResponse.json({
     profile: profileRes.data,
     enrollment: enrollRes.data,
     application: appRes.data,
+    classStartsAt,
   });
 }

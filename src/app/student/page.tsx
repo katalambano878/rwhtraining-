@@ -1,9 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { LogOut, BookOpen, Clock, Loader2, ShieldCheck, ArrowRight, Play, FileText, Settings, Trophy, CreditCard, Mail, Phone, MapPin, Lock, ChevronRight, User as UserIcon, Banknote, Calendar, ExternalLink } from "lucide-react";
-import CurriculumTab from "./CurriculumTab";
+import { ClassCountdown, useClassCountdown } from "@/components/student/ClassCountdown";
+import { FIRST_CLASS_AT } from "@/lib/class-start";
+import { LockedCurriculum } from "./LockedCurriculum";
+
+const CurriculumTab = dynamic(() => import("./CurriculumTab"));
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,6 +28,8 @@ export default function StudentPortal() {
     const [password, setPassword] = useState("");
     const [authError, setAuthError] = useState("");
     const [dashboardData, setDashboardData] = useState<any>(null);
+    const classStartsAt = dashboardData?.classStartsAt || FIRST_CLASS_AT;
+    const course = useClassCountdown(classStartsAt);
     const [activeTab, setActiveTab] = useState<Tab>("dashboard");
     const [showPayModal, setShowPayModal] = useState(false);
     const [payingBalance, setPayingBalance] = useState(false);
@@ -377,7 +384,11 @@ export default function StudentPortal() {
                                 <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
                                     <div>
                                         <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-2">Welcome back, <span className="text-[#2563EB]">{firstName}</span></h1>
-                                        <p className="text-gray-400 text-[15px] max-w-xl">Your seat is secured. Here&apos;s your enrollment overview and preparation materials.</p>
+                                        <p className="text-gray-400 text-[15px] max-w-xl">
+                                            {course.open
+                                                ? "Your seat is secured. Your modules and course materials are open."
+                                                : "Your seat is secured. Modules and course materials open on the first day of class."}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -405,7 +416,7 @@ export default function StudentPortal() {
                                     {[
                                         { label: "Total Paid", value: `GHS ${totalPaid}`, icon: Banknote, color: "emerald" },
                                         { label: "Balance Due", value: `GHS ${balanceDue}`, icon: CreditCard, color: balanceDue > 0 ? "amber" : "emerald" },
-                                        { label: "Resources", value: `${curriculumCount} available`, icon: BookOpen, color: "blue" },
+                                        { label: "Resources", value: course.open ? `${curriculumCount} available` : "Locked", icon: course.open ? BookOpen : Lock, color: "blue" },
                                         { label: "Payment Status", value: balanceDue > 0 ? `Partial — GHS ${balanceDue} due` : "Fully paid", icon: Trophy, color: balanceDue > 0 ? "amber" : "green" },
                                     ].map((stat, i) => (
                                         <Card key={i} className="bg-[#121212] border-white/5 hover:border-white/10 transition-colors">
@@ -438,6 +449,8 @@ export default function StudentPortal() {
                                     </Card>
                                 )}
 
+                                {!course.open && <ClassCountdown startsAt={classStartsAt} />}
+
                                 {/* Quick Links */}
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <button onClick={() => setActiveTab("curriculum")} className="flex items-center gap-4 p-5 rounded-2xl border border-white/5 bg-[#121212] hover:border-[#2563EB]/30 hover:bg-[#2563EB]/5 transition-all group text-left">
@@ -446,7 +459,7 @@ export default function StudentPortal() {
                                         </div>
                                         <div>
                                             <h4 className="font-bold text-white text-[14px]">View Curriculum</h4>
-                                            <p className="text-[12px] text-gray-500">{curriculumCount} resources to explore</p>
+                                            <p className="text-[12px] text-gray-500">{course.open ? `${curriculumCount} resources to explore` : "Locked until the first class"}</p>
                                         </div>
                                         <ChevronRight className="w-4 h-4 text-gray-600 ml-auto group-hover:text-[#2563EB] transition-colors" />
                                     </button>
@@ -478,7 +491,9 @@ export default function StudentPortal() {
                         )}
 
                         {/* CURRICULUM TAB */}
-                        {activeTab === "curriculum" && <CurriculumTab />}
+                        {activeTab === "curriculum" && (
+                            course.open ? <CurriculumTab /> : <LockedCurriculum startsAt={classStartsAt} />
+                        )}
 
                         {/* PAYMENTS TAB */}
                         {activeTab === "payments" && (
