@@ -18,6 +18,7 @@ type PortalUser = { id: string; email: string; role: string };
 export default function StudentPortal() {
     const [user, setUser] = useState<PortalUser | null>(null);
     const [loading, setLoading] = useState(true);
+    const [booting, setBooting] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [authError, setAuthError] = useState("");
@@ -31,8 +32,18 @@ export default function StudentPortal() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordMsg, setPasswordMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
     const [changingPassword, setChangingPassword] = useState(false);
+    const [authView, setAuthView] = useState<"login" | "forgot" | "reset">("login");
+    const [resetToken, setResetToken] = useState("");
+    const [resetPassword, setResetPassword] = useState("");
+    const [resetConfirm, setResetConfirm] = useState("");
+    const [resetNotice, setResetNotice] = useState("");
 
     useEffect(() => {
+        const token = new URLSearchParams(window.location.search).get("recovery");
+        if (token) {
+            setResetToken(token);
+            setAuthView("reset");
+        }
         fetch("/api/auth/session")
             .then((res) => res.json())
             .then((data) => {
@@ -41,8 +52,12 @@ export default function StudentPortal() {
                     return fetchDashboardData();
                 }
                 setLoading(false);
+                setBooting(false);
             })
-            .catch(() => setLoading(false));
+            .catch(() => {
+                setLoading(false);
+                setBooting(false);
+            });
     }, []);
 
     async function fetchDashboardData() {
@@ -54,6 +69,7 @@ export default function StudentPortal() {
             console.error("Dashboard error:", error);
         }
         setLoading(false);
+        setBooting(false);
     }
 
     async function handleLogin(e: React.FormEvent) {
@@ -135,6 +151,54 @@ export default function StudentPortal() {
         setChangingPassword(false);
     }
 
+    async function handleForgot(e: React.FormEvent) {
+        e.preventDefault();
+        setLoading(true);
+        setAuthError("");
+        setResetNotice("");
+        const res = await fetch("/api/auth/forgot", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) setAuthError(data.error || "Could not send the reset link.");
+        else setResetNotice(data.message || "If an account exists for that email, we sent a reset link.");
+        setLoading(false);
+    }
+
+    async function handleReset(e: React.FormEvent) {
+        e.preventDefault();
+        if (resetPassword.length < 8) {
+            setAuthError("Password must be at least 8 characters.");
+            return;
+        }
+        if (resetPassword !== resetConfirm) {
+            setAuthError("Passwords do not match.");
+            return;
+        }
+        setLoading(true);
+        setAuthError("");
+        const res = await fetch("/api/auth/reset", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: resetToken, password: resetPassword }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+            setAuthError(data.error || "Could not reset your password.");
+            setLoading(false);
+            return;
+        }
+        window.history.replaceState({}, "", "/student");
+        setAuthView("login");
+        setPassword("");
+        setResetPassword("");
+        setResetConfirm("");
+        setResetNotice("Password updated. Sign in with your new password.");
+        setLoading(false);
+    }
+
     async function handleLogout() {
         await fetch("/api/auth/logout", { method: "POST" });
         setUser(null);
@@ -142,7 +206,7 @@ export default function StudentPortal() {
         setLoading(false);
     }
 
-    if (loading && !user && !authError) {
+    if (booting && !user) {
         return (
             <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
@@ -166,28 +230,67 @@ export default function StudentPortal() {
                             <Image src="/remote-logo.png" alt="Logo" width={40} height={30} className="w-10 h-auto object-contain" />
                         </div>
                         <h2 className="mt-6 text-3xl font-serif font-extrabold text-white tracking-tight">Student Portal</h2>
-                        <p className="mt-2 text-sm text-gray-400">Sign in with the credentials sent to your email after payment.</p>
+                        <p className="mt-2 text-sm text-gray-400">
+                            {authView === "forgot"
+                                ? "We'll send a reset link to your email and phone."
+                                : authView === "reset"
+                                    ? "Choose a new password for your student account."
+                                    : "Sign in with the credentials sent after payment."}
+                        </p>
                     </div>
-                    <form className="mt-8 space-y-6 bg-[#121212]/80 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl" onSubmit={handleLogin}>
+                    <form
+                        className="mt-8 space-y-6 bg-[#121212]/80 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl"
+                        onSubmit={authView === "forgot" ? handleForgot : authView === "reset" ? handleReset : handleLogin}
+                    >
                         {authError && (
                             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-sm font-semibold text-center">
                                 {authError}
                             </div>
                         )}
-                        <div className="space-y-5">
-                            <div className="space-y-2 relative group">
-                                <Label className="text-gray-400 font-bold uppercase tracking-widest text-xs transition-colors group-focus-within:text-[#2563EB]">Email address</Label>
-                                <Input type="email" required className="bg-black/50 border-white/5 rounded-2xl h-14 px-5 text-gray-200 placeholder:text-gray-600 focus:border-[#2563EB]/50 focus:ring-1 focus:ring-[#2563EB]/20 transition-all font-medium" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        {resetNotice && (
+                            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-sm font-semibold text-center">
+                                {resetNotice}
                             </div>
-                            <div className="space-y-2 relative group">
-                                <Label className="text-gray-400 font-bold uppercase tracking-widest text-xs transition-colors group-focus-within:text-[#2563EB]">Password</Label>
-                                <Input type="password" required className="bg-black/50 border-white/5 rounded-2xl h-14 px-5 text-gray-200 placeholder:text-gray-600 focus:border-[#2563EB]/50 focus:ring-1 focus:ring-[#2563EB]/20 transition-all font-medium" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        )}
+                        {authView === "reset" ? (
+                            <div className="space-y-5">
+                                <div className="space-y-2">
+                                    <Label className="text-gray-400 font-bold uppercase tracking-widest text-xs">New password</Label>
+                                    <Input type="password" required minLength={8} className="bg-black/50 border-white/5 rounded-2xl h-14 px-5 text-gray-200 placeholder:text-gray-600 focus:border-[#2563EB]/50 focus:ring-1 focus:ring-[#2563EB]/20 transition-all font-medium" placeholder="At least 8 characters" value={resetPassword} onChange={(e) => setResetPassword(e.target.value)} />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label className="text-gray-400 font-bold uppercase tracking-widest text-xs">Confirm password</Label>
+                                    <Input type="password" required minLength={8} className="bg-black/50 border-white/5 rounded-2xl h-14 px-5 text-gray-200 placeholder:text-gray-600 focus:border-[#2563EB]/50 focus:ring-1 focus:ring-[#2563EB]/20 transition-all font-medium" placeholder="Repeat password" value={resetConfirm} onChange={(e) => setResetConfirm(e.target.value)} />
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="space-y-5">
+                                <div className="space-y-2 relative group">
+                                    <Label className="text-gray-400 font-bold uppercase tracking-widest text-xs transition-colors group-focus-within:text-[#2563EB]">Email address</Label>
+                                    <Input type="email" required className="bg-black/50 border-white/5 rounded-2xl h-14 px-5 text-gray-200 placeholder:text-gray-600 focus:border-[#2563EB]/50 focus:ring-1 focus:ring-[#2563EB]/20 transition-all font-medium" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                </div>
+                                {authView === "login" && (
+                                    <div className="space-y-2 relative group">
+                                        <div className="flex items-center justify-between">
+                                            <Label className="text-gray-400 font-bold uppercase tracking-widest text-xs transition-colors group-focus-within:text-[#2563EB]">Password</Label>
+                                            <button type="button" onClick={() => { setAuthView("forgot"); setAuthError(""); setResetNotice(""); }} className="text-xs font-semibold text-[#2563EB] hover:text-white transition-colors">
+                                                Forgot password?
+                                            </button>
+                                        </div>
+                                        <Input type="password" required className="bg-black/50 border-white/5 rounded-2xl h-14 px-5 text-gray-200 placeholder:text-gray-600 focus:border-[#2563EB]/50 focus:ring-1 focus:ring-[#2563EB]/20 transition-all font-medium" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                    </div>
+                                )}
+                            </div>
+                        )}
                         <Button type="submit" disabled={loading} className="w-full h-14 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold tracking-wide shadow-[0_0_20px_rgba(37,99,235,0.4)] disabled:opacity-50 transition-all">
-                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign In"}
+                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : authView === "forgot" ? "Send reset link" : authView === "reset" ? "Save new password" : "Sign In"}
                         </Button>
-                        <div className="text-center pt-2">
+                        <div className="text-center pt-2 space-y-3">
+                            {authView !== "login" && (
+                                <button type="button" onClick={() => { setAuthView("login"); setAuthError(""); }} className="block w-full text-sm font-semibold text-gray-400 hover:text-white transition-colors">
+                                    Back to sign in
+                                </button>
+                            )}
                             <Link href="/" className="text-sm font-semibold text-gray-500 hover:text-white transition-colors">Return to masterclass</Link>
                         </div>
                     </form>

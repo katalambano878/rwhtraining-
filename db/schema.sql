@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   phone text NOT NULL DEFAULT '',
   city text,
   recovery_token text,
+  recovery_expires timestamptz,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );

@@ -421,9 +421,10 @@ function authApi() {
       async generateLink(input: { type: string; email: string }) {
         const email = input.email.trim().toLowerCase();
         const token = crypto.randomUUID();
+        const expires = new Date(Date.now() + 60 * 60 * 1000).toISOString();
         const updated = await getPool().query(
-          "UPDATE profiles SET recovery_token = $1, updated_at = now() WHERE lower(email) = $2 RETURNING email",
-          [token, email]
+          "UPDATE profiles SET recovery_token = $1, recovery_expires = $2, updated_at = now() WHERE lower(email) = $3 RETURNING email",
+          [token, expires, email]
         );
         if (!updated.rowCount) return { data: null, error: { message: "No account found with that email" } };
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://remoteworkhub.org";
@@ -455,4 +456,39 @@ export async function findUserByEmail(email: string) {
 export async function updatePassword(userId: string, password: string) {
   const passwordHash = await bcrypt.hash(password, 10);
   await getPool().query("UPDATE profiles SET password_hash = $1, updated_at = now() WHERE id = $2", [passwordHash, userId]);
+}
+
+const RESET_WINDOW_MS = 60 * 60 * 1000;
+
+export async function createPasswordReset(email: string): Promise<{
+  email: string;
+  phone: string;
+  firstName: string;
+  token: string;
+} | null> {
+  const found = await getPool().query(
+    "SELECT id, email, phone, full_name FROM profiles WHERE lower(email) = $1",
+    [email.trim().toLowerCase()]
+  );
+  const row = found.rows[0] as { id: string; email: string; phone: string; full_name: string } | undefined;
+  if (!row) return null;
+  const token = crypto.randomUUID();
+  const expires = new Date(Date.now() + RESET_WINDOW_MS).toISOString();
+  await getPool().query(
+    "UPDATE profiles SET recovery_token = $1, recovery_expires = $2, updated_at = now() WHERE id = $3",
+    [token, expires, row.id]
+  );
+  const firstName = row.full_name.trim().split(/\s+/)[0] || "there";
+  return { email: row.email, phone: row.phone || "", firstName, token };
+}
+
+export async function resetPasswordWithToken(token: string, password: string): Promise<boolean> {
+  const passwordHash = await bcrypt.hash(password, 10);
+  const updated = await getPool().query(
+    `UPDATE profiles
+     SET password_hash = $1, recovery_token = NULL, recovery_expires = NULL, updated_at = now()
+     WHERE recovery_token = $2 AND recovery_expires > now()`,
+    [passwordHash, token]
+  );
+  return (updated.rowCount ?? 0) > 0;
 }
