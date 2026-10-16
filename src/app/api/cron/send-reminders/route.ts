@@ -3,7 +3,7 @@ import { createClient } from "@/lib/db";
 import { SmsAdapter } from "@/lib/sms-adapter";
 import { sendEmail } from "@/lib/send-email";
 import { wrapInLayout, mergeVariables } from "@/lib/email-templates";
-const CLASS_DATE = new Date("2026-10-19T08:00:00Z"); // Monday October 19, 8am GMT
+const CLASS_DATE = new Date("2026-10-19T10:00:00Z"); // Monday October 19, 10am GMT
 
 const SMS_SUFFIX = ` - Remote Work Hub`;
 

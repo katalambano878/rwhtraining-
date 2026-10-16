@@ -55,7 +55,7 @@ const contactMethods = [
 ];
 
 const faqs = [
-  { q: "When does the October cohort start?", a: `October 19, 2026. Training runs Mon–Sat, 8am–5pm, for 4 weeks.` },
+  { q: "When does the October cohort start?", a: `October 19, 2026. The first lecture is Monday at 10:00 AM.` },
   { q: "How do I secure my seat?", a: "Apply via the application form. Upon review, we'll reach out to confirm your spot and provide payment details." },
   { q: "Is there a payment plan?", a: `Yes. Contact us on WhatsApp (${brand.phone}) to arrange a deposit and installment structure.` },
   { q: "Where is the training held?", a: `Hybrid format: one onsite session at ${brand.address} plus two online sessions each week.` },
