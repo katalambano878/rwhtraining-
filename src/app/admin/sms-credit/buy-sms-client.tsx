@@ -43,7 +43,7 @@ async function adminJson<T>(url: string, init?: RequestInit): Promise<T> {
   return json as T;
 }
 
-export default function BuySmsPage() {
+export function BuySmsClient() {
   const [billing, setBilling] = useState<Billing | null>(null);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
