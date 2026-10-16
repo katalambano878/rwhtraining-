@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { LayoutDashboard, Users, CreditCard, Settings as SettingsIcon, LogOut, ChevronRight, Menu, Bell, Loader2, ShieldCheck, ArrowUpRight, AlertCircle, GraduationCap, X, Megaphone } from "lucide-react";
+import { LayoutDashboard, Users, CreditCard, Settings as SettingsIcon, LogOut, ChevronRight, Menu, Bell, Loader2, ShieldCheck, ArrowUpRight, AlertCircle, GraduationCap, X, Megaphone, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { name: "Applications", href: "/admin/applications", icon: Users },
         { name: "Students", href: "/admin/students", icon: GraduationCap },
         { name: "Payments", href: "/admin/payments", icon: CreditCard },
+        { name: "Buy SMS", href: "/admin/sms-credit", icon: Smartphone },
         { name: "Marketing", href: "/admin/marketing", icon: Megaphone },
         { name: "Settings", href: "/admin/settings", icon: SettingsIcon },
     ];
