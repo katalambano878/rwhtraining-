@@ -33,7 +33,7 @@ function getReminderSms(daysLeft: number, timeOfDay: "morning" | "evening", firs
     if (timeOfDay === "morning") {
       return `Good morning ${name}! 2 DAYS TO GO. Monday is almost here. The Remote Work Hub Masterclass is your shortcut to becoming a professional web developer. Secure your spot today: remoteworkhub.org/apply` + SMS_SUFFIX;
     }
-    return `${name}, ONLY 2 DAYS LEFT! The Elite Web Dev Masterclass kicks off Monday morning. Paid internship included. Don't let this opportunity pass you. Apply & pay now: remoteworkhub.org/apply` + SMS_SUFFIX;
+    return `${name}, ONLY 2 DAYS LEFT! The Elite Web Dev Masterclass kicks off Monday morning. 1-month internship included. Don't let this opportunity pass you. Apply & pay now: remoteworkhub.org/apply` + SMS_SUFFIX;
   }
 
   if (daysLeft === 1) {

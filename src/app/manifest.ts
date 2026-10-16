@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Remote Work Hub — Elite Web Development Masterclass",
     short_name: "Remote Work Hub",
     description:
-      "Become a professional web developer in 4 weeks. Professional Diploma, 1-month internship, and hybrid delivery with weekly onsite and online sessions.",
+      "Become a professional web developer in 4 weeks. Professional Certificate, 1-month internship, and hybrid delivery with weekly onsite and online sessions.",
     start_url: "/",
     display: "standalone",
     background_color: "#0A0A0A",

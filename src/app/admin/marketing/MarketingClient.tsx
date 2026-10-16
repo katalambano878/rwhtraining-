@@ -31,7 +31,7 @@ const SMS_PRESETS = [
         name: "New Cohort Announcement",
         body: `Hi {{first_name}}! Doctor Barns here. We're launching a brand new cohort of the RWH Elite Web Dev & SaaS Masterclass and I thought of you.
 
-This time: 4 weeks of hands-on building, a paid internship at Doctor Barns Tech, and we help you land your first paying client.
+This time: 4 weeks of hands-on building, a 1-month internship at Doctor Barns Tech, and we help you land your first paying client.
 
 Seats are strictly limited. Secure yours now: https://remoteworkhub.org/apply
 
@@ -55,7 +55,7 @@ Don't wait. Once seats are gone, they're gone.
 
 I noticed you tried to join our last masterclass but didn't complete enrollment. I want to personally invite you to our new cohort starting soon.
 
-Same promise: build real software, get a paid internship, land your first client. We've made it even better this time.
+Same promise: build real software, get a 1-month internship, land your first client. We've made it even better this time.
 
 Interested? Just reply YES or apply: https://remoteworkhub.org/apply
 - Doctor Barns`,

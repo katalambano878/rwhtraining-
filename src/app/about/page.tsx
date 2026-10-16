@@ -125,7 +125,7 @@ export default function AboutPage() {
                   and we teach it offline, in person, with relentless mentorship and zero tolerance for mediocrity.
                 </p>
                 <p>
-                  Every graduate leaves with a paid client, a professional portfolio, a diploma, and a 1-month
+                  Every graduate leaves with a paid client, a professional portfolio, a certificate, and a 1-month
                   internship at Doctor Barns Tech. The two best-performing students get hired full-time.
                   That is the standard we hold ourselves to.
                 </p>

@@ -621,7 +621,7 @@ export const EMAIL_TEMPLATES = {
             <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0; vertical-align: top; width: 40px;">
               <div style="width: 26px; height: 26px; background: #ecfdf5; border-radius: 50%; text-align: center; line-height: 26px; color: #059669; font-size: 14px;">&#10003;</div>
             </td>
-            <td style="padding: 12px 0 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 15px; color: #334155;">Paid internship opportunity</td>
+            <td style="padding: 12px 0 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 15px; color: #334155;">1-month internship opportunity</td>
           </tr>
           <tr>
             <td style="padding: 12px 0; vertical-align: top; width: 40px;">

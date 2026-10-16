@@ -206,8 +206,8 @@ export const guarantees = [
     statLabel: "Job Offers Per Cohort",
   },
   {
-    title: "Professional Diploma",
-    desc: "Graduate with a professional Diploma in Web Development issued by Doctor Barns Tech. A credential that signals real-world capability — not just course completion.",
+    title: "Professional Certificate",
+    desc: "Graduate with a professional Certificate in Web Development issued by Doctor Barns Tech. A credential that signals real-world capability — not just course completion.",
     icon: "Award",
     color: "blue" as const,
     stat: "✓",
@@ -324,11 +324,11 @@ export const faqs = [
   },
   {
     q: "What do I receive at the end of the program?",
-    a: "You receive: (1) A Professional Diploma in Web Development from Doctor Barns Tech, (2) A professional portfolio of real production projects, (3) Your first signed paying client contract, (4) A 1-month internship placement, (5) Lifetime access to the RWH Alumni Network, and (6) A chance at full-time employment.",
+    a: "You receive: (1) A Professional Certificate in Web Development from Doctor Barns Tech, (2) A professional portfolio of real production projects, (3) Your first signed paying client contract, (4) A 1-month internship placement, (5) Lifetime access to the RWH Alumni Network, and (6) A chance at full-time employment.",
   },
   {
     q: "What is the total program fee?",
-    a: "The full fee is GHS 1,000 for the complete 4-week program. This is a special promotional price for the October 2026 cohort. It covers all training, materials, your Professional Diploma, the 1-month internship placement, and the 100K Challenge client acquisition module. Every cedi is an investment in a skill set that pays you back for life.",
+    a: "The full fee is GHS 1,000 for the complete 4-week program. This is a special promotional price for the October 2026 cohort. It covers all training, materials, your Professional Certificate, the 1-month internship placement, and the 100K Challenge client acquisition module. Every cedi is an investment in a skill set that pays you back for life.",
   },
 ];
 

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | Remote Work Hub",
   },
   description:
-    "Become a Professional Web Developer in 4 Weeks. Professional Diploma, 1-month internship, and hybrid delivery (1 onsite + 2 online meetings weekly). Starts October 19, 2026 in Accra, Ghana.",
+    "Become a Professional Web Developer in 4 Weeks. Professional Certificate, 1-month internship, and hybrid delivery (1 onsite + 2 online meetings weekly). Starts October 19, 2026 in Accra, Ghana.",
   metadataBase: new URL(APP_URL),
   applicationName: "Remote Work Hub Masterclass",
   generator: "Next.js",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     "Next.js course Ghana",
     "React training Accra",
     "full stack developer course",
-    "professional diploma web development Ghana",
+    "professional certificate web development Ghana",
     "coding school Accra Ghana",
     "tech training West Africa",
     "freelance web developer Ghana",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     siteName: "Remote Work Hub",
     title: "2026 Elite Web Development Masterclass — Remote Work Hub",
     description:
-      "Become a professional web developer in 4 weeks. Professional Diploma + 1-month internship. Hybrid format in Accra with online sessions. GHS 1,000.",
+      "Become a professional web developer in 4 weeks. Professional Certificate + 1-month internship. Hybrid format in Accra with online sessions. GHS 1,000.",
     countryName: "Ghana",
   },
   twitter: {
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     creator: "@remoteworkhub",
     title: "2026 Elite Web Development Masterclass — Remote Work Hub",
     description:
-      "Become a professional web developer in 4 weeks. Professional Diploma + 1-month internship. Hybrid format. GHS 1,000. Starts October 19, 2026.",
+      "Become a professional web developer in 4 weeks. Professional Certificate + 1-month internship. Hybrid format. GHS 1,000. Starts October 19, 2026.",
   },
   robots: {
     index: true,

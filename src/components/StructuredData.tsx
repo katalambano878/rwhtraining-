@@ -56,7 +56,7 @@ const courseSchema = {
     "Agency branding and pricing",
   ],
   numberOfCredits: 1,
-  occupationalCredentialAwarded: "Professional Diploma in Web Development",
+  occupationalCredentialAwarded: "Professional Certificate in Web Development",
   timeRequired: "P4W",
   hasCourseInstance: {
     "@type": "CourseInstance",
@@ -184,7 +184,7 @@ const faqSchema = {
       name: "What do I get at the end of the program?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "You receive a Professional Diploma in Web Development, a professional portfolio of real projects, your first paying client, a 1-month internship, access to our alumni network, and a chance to be hired full-time by Doctor Barns Tech.",
+        text: "You receive a Professional Certificate in Web Development, a professional portfolio of real projects, your first paying client, a 1-month internship, access to our alumni network, and a chance to be hired full-time by Doctor Barns Tech.",
       },
     },
   ],

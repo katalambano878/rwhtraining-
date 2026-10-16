@@ -68,7 +68,7 @@ const techStack = [
 const programFeatures = [
   { icon: Clock, label: "4 Weeks Intensive", sub: "Hybrid weekly schedule" },
   { icon: Users, label: "Max 10 Students", sub: "Elite, personalized mentorship" },
-  { icon: Award, label: "Professional Diploma", sub: "Doctor Barns Tech award" },
+  { icon: Award, label: "Professional Certificate", sub: "Doctor Barns Tech award" },
   { icon: GraduationCap, label: "Internship Included", sub: "1-month at DBT" },
   { icon: Calendar, label: "Starts October 19", sub: "2026 cohort" },
   { icon: Download, label: "All Materials Included", sub: "Code, resources & templates" },
@@ -317,8 +317,8 @@ export default function CurriculumPage() {
                 {[
                   {
                     num: "01",
-                    title: "Diploma in Web Development",
-                    desc: "A Doctor Barns Tech-issued Professional Diploma recognized in the industry.",
+                    title: "Certificate in Web Development",
+                    desc: "A Doctor Barns Tech-issued Professional Certificate recognized in the industry.",
                     color: "bg-blue-50 border-blue-200",
                     numColor: "text-blue-600",
                   },

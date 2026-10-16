@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { RWH_LOGO_ON_DARK } from "@/lib/brand/og-logo";
 
 export const alt = "Remote Work Hub — 2026 Elite Web Development Masterclass";
 export const size = { width: 1200, height: 630 };
@@ -57,32 +58,8 @@ export default function OGImage() {
         >
           {/* Top row: Logo + Badge */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <div
-                style={{
-                  width: 52,
-                  height: 52,
-                  background: "#2563EB",
-                  borderRadius: 14,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 28,
-                  fontWeight: 900,
-                  color: "white",
-                }}
-              >
-                R
-              </div>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <span style={{ color: "#ffffff", fontSize: 22, fontWeight: 800, letterSpacing: "-0.3px" }}>
-                  Remote Work Hub
-                </span>
-                <span style={{ color: "#64748b", fontSize: 13, fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase" as const }}>
-                  Doctor Barns Tech
-                </span>
-              </div>
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={RWH_LOGO_ON_DARK} width={330} height={55} alt="Remote Work Hub, by Doctor Barns Tech" />
             <div
               style={{
                 display: "flex",
@@ -129,14 +106,14 @@ export default function OGImage() {
               Web Developer
             </span>
             <span style={{ color: "#94a3b8", fontSize: 22, fontWeight: 600, lineHeight: 1.4 }}>
-              Professional Diploma. 1-month internship. Hybrid format with weekly onsite and online sessions.
+              Professional Certificate. 1-month internship. Hybrid format with weekly onsite and online sessions.
             </span>
           </div>
 
           {/* Bottom row: Features */}
           <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
             {[
-              { label: "Professional Diploma", color: "#22c55e" },
+              { label: "Professional Certificate", color: "#22c55e" },
               { label: "1-Month Internship", color: "#3b82f6" },
               { label: "Top 2 Get Hired", color: "#f59e0b" },
               { label: "GHS 1,000", color: "#ffffff" },

@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { RWH_LOGO_ON_DARK } from "@/lib/brand/og-logo";
 
 export const alt = "Remote Work Hub — 2026 Elite Web Development Masterclass";
 export const size = { width: 1200, height: 630 };
@@ -54,24 +55,9 @@ export default function TwitterImage() {
             textAlign: "center",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 32 }}>
-            <div
-              style={{
-                width: 48,
-                height: 48,
-                background: "#2563EB",
-                borderRadius: 14,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 26,
-                fontWeight: 900,
-                color: "white",
-              }}
-            >
-              R
-            </div>
-            <span style={{ color: "#ffffff", fontSize: 22, fontWeight: 800 }}>Remote Work Hub</span>
+          <div style={{ display: "flex", marginBottom: 32 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={RWH_LOGO_ON_DARK} width={300} height={50} alt="Remote Work Hub, by Doctor Barns Tech" />
           </div>
 
           <span style={{ color: "#3b82f6", fontSize: 15, fontWeight: 700, letterSpacing: "3px", textTransform: "uppercase" as const, marginBottom: 12 }}>
@@ -84,7 +70,7 @@ export default function TwitterImage() {
             Web Developer
           </span>
           <span style={{ color: "#94a3b8", fontSize: 20, fontWeight: 600, maxWidth: 700 }}>
-            Professional Diploma. 1-month internship. Hybrid format. Top 2 get hired by Doctor Barns Tech.
+            Professional Certificate. 1-month internship. Hybrid format. Top 2 get hired by Doctor Barns Tech.
           </span>
 
           <div style={{ display: "flex", gap: 28, marginTop: 36 }}>

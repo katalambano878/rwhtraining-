@@ -163,7 +163,7 @@ export default function HomePage() {
 
               <motion.div variants={FADE_UP} className="flex flex-wrap gap-2 pt-0.5 w-full max-w-xl font-sans">
                 {[
-                  { icon: CheckCircle2, text: "Professional Diploma", color: "text-blue-400" },
+                  { icon: CheckCircle2, text: "Professional Certificate", color: "text-blue-400" },
                   { icon: Flame, text: "Top 2 Get Hired", color: "text-blue-400" },
                   { icon: CheckCircle2, text: "No Experience Required", color: "text-blue-400" },
                 ].map((item) => (
@@ -756,7 +756,7 @@ export default function HomePage() {
                   <span className="text-amber-400">October 19.</span>
                 </h2>
                 <p className="text-slate-400 text-base leading-relaxed mb-6 max-w-md">
-                  Professional Diploma, 1-month internship, your first paying client, and the chance to get hired —
+                  Professional Certificate, 1-month internship, your first paying client, and the chance to get hired —
                   all included. Limited seats per cohort to ensure elite-level training.
                 </p>
 
@@ -765,7 +765,7 @@ export default function HomePage() {
                     { icon: MapPin, text: "Hybrid · Accra + Online" },
                     { icon: Target, text: "First Client (with strict execution)" },
                     { icon: Flame, text: "Top 2 Get Hired" },
-                    { icon: GraduationCap, text: "Professional Diploma" },
+                    { icon: GraduationCap, text: "Professional Certificate" },
                   ].map((item) => (
                     <div key={item.text} className="flex items-center gap-2">
                       <item.icon className="w-4 h-4 text-blue-400" />

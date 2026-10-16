@@ -384,7 +384,7 @@ export default function SuccessPage() {
               {
                 icon: Building2,
                 title: "Tech Employment",
-                desc: "Graduates with a professional portfolio, a diploma, and a proven client track record are positioned to apply for developer roles at Ghanaian tech companies, startups, and agencies.",
+                desc: "Graduates with a professional portfolio, a certificate, and a proven client track record are positioned to apply for developer roles at Ghanaian tech companies, startups, and agencies.",
                 badge: "Alumni Support",
                 badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
               },
