@@ -46,13 +46,14 @@ export function Navbar() {
 
             {/* ── Logo ── */}
             <Link href="/" className="relative z-50 flex items-center group">
-              <Image 
-                src="/remote-logo.png" 
-                alt="Remote Work Hub Logo" 
-                width={140} 
-                height={106} 
-                className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              <Image
+                src={isScrolled || !isHome ? "/brand/logo.svg" : "/brand/logo-on-dark.svg"}
+                alt="Remote Work Hub"
+                width={256}
+                height={40}
+                className="h-8 sm:h-10 w-auto transition-transform duration-300 group-hover:scale-105"
                 priority
+                unoptimized
               />
             </Link>
 

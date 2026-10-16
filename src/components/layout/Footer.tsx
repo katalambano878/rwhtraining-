@@ -17,12 +17,13 @@ export function Footer() {
           <div className="lg:col-span-5 space-y-8">
             <div>
               <Link href="/" className="inline-flex items-center mb-4">
-                <Image 
-                  src="/remote-logo.png" 
-                  alt="Remote Work Hub Logo" 
-                  width={160} 
-                  height={121} 
-                  className="h-14 w-auto object-contain"
+                <Image
+                  src="/brand/logo-endorsed-on-dark.svg"
+                  alt="Remote Work Hub, by Doctor Barns Tech"
+                  width={300}
+                  height={47}
+                  className="h-12 w-auto"
+                  unoptimized
                 />
               </Link>
               <p className="text-slate-400 font-light text-base max-w-sm leading-relaxed">

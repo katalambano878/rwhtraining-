@@ -108,7 +108,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <div className="w-full max-w-[420px] space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 relative z-10">
                     <div className="text-center">
                         <div className="w-16 h-16 bg-white rounded-2xl border border-slate-200/60 flex items-center justify-center mx-auto mb-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                            <Image src="/remote-logo.png" alt="Logo" width={40} height={30} className="w-10 h-auto object-contain" />
+                            <Image src="/brand/mark.svg" alt="Remote Work Hub" width={40} height={40} className="w-10 h-auto" unoptimized />
                         </div>
                         <h2 className="mt-6 text-[28px] font-extrabold text-slate-900 tracking-tight">Mission Control</h2>
                         <p className="mt-2 text-[15px] font-medium text-slate-500">Restricted analytics and operations.</p>
