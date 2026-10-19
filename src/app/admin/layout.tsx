@@ -25,9 +25,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
         { name: "Abandoned Drafts", href: "/admin/drafts", icon: AlertCircle },
         { name: "Applications", href: "/admin/applications", icon: Users },
+        { name: "Buy SMS", href: "/admin/sms-credit", icon: Smartphone },
         { name: "Students", href: "/admin/students", icon: GraduationCap },
         { name: "Payments", href: "/admin/payments", icon: CreditCard },
-        { name: "Buy SMS", href: "/admin/sms-credit", icon: Smartphone },
         { name: "Marketing", href: "/admin/marketing", icon: Megaphone },
         { name: "Settings", href: "/admin/settings", icon: SettingsIcon },
     ];
