@@ -133,7 +133,10 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-500 font-light">
           <p className="max-w-2xl text-center md:text-left">
-            © 2026 Remote Work Hub. All rights reserved.
+            © 2026 Remote Work Hub. All rights reserved. Powered by{" "}
+            <a href="https://doctorbarns.com" target="_blank" rel="noopener" className="text-slate-500 hover:underline">
+              Doctor Barns Tech
+            </a>
           </p>
           <div className="flex items-center gap-6 shrink-0">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
