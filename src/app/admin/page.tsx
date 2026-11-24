@@ -18,6 +18,8 @@ import { CohortScopePicker } from "@/components/admin/CohortScopePicker";
 import { VisitorRangePicker } from "@/components/admin/VisitorRangePicker";
 import { PipelineNote } from "./components/PipelineNote";
 import { COURSE_TOTAL_GHS } from "@/lib/pricing";
+import { getDashboardSmsCredit } from "@/lib/sms-credit-cache";
+import { SmsCreditDashboardCard } from "@/components/admin/SmsCreditDashboardCard";
 
 export const revalidate = 0;
 
@@ -190,10 +192,13 @@ export default async function AdminDashboardPage({
     searchParams?: Promise<{ cohort?: string; visitors?: string }>;
 }) {
     const params = (await searchParams) || {};
-    const data = await getAdminData(
-        normalizeCohortFilter(params.cohort),
-        normalizeVisitorRange(params.visitors)
-    );
+    const [data, smsCredit] = await Promise.all([
+        getAdminData(
+            normalizeCohortFilter(params.cohort),
+            normalizeVisitorRange(params.visitors)
+        ),
+        getDashboardSmsCredit(),
+    ]);
 
     if (!data) return <div className="p-10 text-slate-900 font-bold">Error: Supabase config missing.</div>;
 
@@ -256,6 +261,10 @@ export default async function AdminDashboardPage({
                         </CardContent>
                     </Card>
                 ))}
+            </div>
+
+            <div className="max-w-md">
+                <SmsCreditDashboardCard smsCredit={smsCredit} />
             </div>
 
             {/* Conversion + Outstanding Balance row */}
